@@ -1,3 +1,5 @@
+<%= link_to "Create Story", new_story_path, class: "btn btn-success" %>
+
 <ul>
   <% @stories.each do |story| %>
     <li><%= link_to story.title, story %></li>

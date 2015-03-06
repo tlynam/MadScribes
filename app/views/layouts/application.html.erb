@@ -7,10 +7,29 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <header>
+    <nav class="navbar-collapse bs-navbar-collapse collapse" aria-expanded="false">
+      <div class="container">
+        <div class="navbar-header">
+          <h2><%= link_to "MadScribes", root_url %></h2>
+        </div>
+        <ul class="nav navbar-nav">
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <% if signed_in? %>
+            <li class="profile"><%= current_user.email %></li>
+            <li><%= link_to "Log out", destroy_user_session_path, method: :delete %></li>
+          <% else %>
+            <li><%= link_to "Log in", new_user_session_path %></li>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
+  </header>
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
-
-<%= yield %>
-
+  <div class="container">
+    <%= yield %>
+  </div>
 </body>
 </html>

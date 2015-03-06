@@ -1,0 +1,23 @@
+<% if @story.errors.any? %>
+  <ul>
+    <% @story.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= form_for @story do |f| %>
+  <fieldset>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </fieldset>
+  <fieldset>
+    <%= f.label :writing_period %>
+    <%= f.number_field :writing_period %>
+  </fieldset>
+  <fieldset>
+    <%= f.label :voting_period %>
+    <%= f.number_field :voting_period %>
+  </fieldset>
+  <%= f.submit %>
+<% end %>

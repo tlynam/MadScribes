@@ -1,13 +1,25 @@
-<article>
-  <h1><%= @story.title %></h1>
-  <p><%= @story.body %></p>
+<h1><%= @story.title %></h1>
+<h4>by <%= @story.user.email %></h4>
+<p><%= @story.body %></p>
+<div class="sentence_container">
   <table class="table">
-    <body>
-      <% @story.sentences.each do |sentence| %>
+    <thead>
+      <tr>
+        <th>Round</th>
+        <th>Author</th>
+        <th>Votes</th>
+        <th>Sentence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @story.sentences.order(:round).each do |sentence| %>
         <tr>
-          <p><%= sentence.body %></p>
+          <td><%= sentence.round %></td>
+          <td><%= sentence.user.email %></td>
+          <td><%= sentence.votes.count %></td>
+          <td><%= sentence.body %></td>
         </tr>
       <% end %>
-    </body>
+    </tbody>
   </table>
-</article>
+</div>

@@ -14,3 +14,12 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+nav .profile {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+form .field_with_errors {
+  display: inline;
+}
