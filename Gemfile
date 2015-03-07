@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.0'
 gem 'pg'
 gem 'bootstrap-sass'
+gem 'annotate'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
