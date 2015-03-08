@@ -1,5 +1,14 @@
 <h1><%= @story.title %></h1>
 <h4>by <%= @story.user.email %></h4>
+
+<% if !@story.started_at && @story.user == current_user %>
+  <h3><%= button_to "Start Game?", action: :start_story %></h3>
+<% end %>
+
+<% if @story.started_at %>
+  Started at: <%= @story.started_at %>
+<% end %>
+
 <p><%= @story.body %></p>
 <div class="sentence_container">
   <table class="table">
@@ -23,3 +32,39 @@
     </tbody>
   </table>
 </div>
+
+Submit a sentence before
+
+<div id="countdown"><%= @story.writing_period %></div>
+
+Submit a sentence
+<%= form_for @sentence, url: story_sentences_url(@story) do |f| %>
+  <fieldset>
+    <%= f.label :body %>
+    <%= f.text_field :body %>
+  </fieldset>
+  <%= f.submit %>
+<% end %>
+
+<script type="text/javascript">
+  var seconds;
+  var temp;
+ 
+  function countdown() {
+    seconds = document.getElementById('countdown').innerHTML;
+    seconds = parseInt(seconds, 10);
+ 
+    if (seconds == 1) {
+      temp = document.getElementById('countdown');
+      temp.innerHTML = "Writing period over";
+      return;
+    }
+ 
+    seconds--;
+    temp = document.getElementById('countdown');
+    temp.innerHTML = seconds;
+    timeoutMyOswego = setTimeout(countdown, 1000);
+  } 
+ 
+  countdown();
+</script>

@@ -5,9 +5,12 @@ class StoriesController < ApplicationController
 
   def show
     @story = Story.find params[:id]
+
+    @sentence = Sentence.new story_id: @story.id
   end
 
   def new
+    redirect_to new_user_session_path unless signed_in?
     @story = Story.new user: current_user
   end
 
@@ -22,6 +25,13 @@ class StoriesController < ApplicationController
   end
 
   def story_params
-    params.require(:story).permit :id, :title, :writing_period, :voting_period
+    params.require(:story).permit :id, :title, :writing_period, :voting_period, :rounds
   end
+
+  def start_story
+    story = Story.find params[:id]
+    story.update_attribute(:started_at, Time.now)
+    redirect_to story
+  end
+
 end
