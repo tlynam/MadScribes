@@ -1,27 +1,40 @@
-<% if @story.errors.any? %>
-  <ul>
-    <% @story.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<%= form_for @story do |f| %>
-  <fieldset>
-    <%= f.label :title %>
-    <%= f.text_field :title %>
-  </fieldset>
-  <fieldset>
-    <%= f.label :rounds %>
-    <%= f.number_field :rounds %>
-  </fieldset>
-  <fieldset>
-    <%= f.label :writing_period %>
-    <%= f.number_field :writing_period %>
-  </fieldset>
-  <fieldset>
-    <%= f.label :voting_period %>
-    <%= f.number_field :voting_period %>
-  </fieldset>
-  <%= f.submit %>
+<%= form_for @story, :html => {:class => "form-horizontal"} do |f| %>
+  <% if @story.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger" role="alert">
+      <ul>
+      <% @story.errors.full_messages.each do |message| %>
+        <h3><li><%= message %></li><h3>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field form-group">
+    <%= f.label :title, class: "col-sm-2 control-label" %>
+    <div class="col-sm-8">
+      <%= f.text_field :title, class: "form-control", :autofocus => true %>
+    </div>
+  </div>
+  <div class="field form-group">
+    <%= f.label :rounds, class: "col-sm-2 control-label" %>
+    <div class="col-sm-1">
+      <%= f.number_field :rounds, class: "form-control" %>
+    </div>
+  </div>
+  <div class="field form-group">
+    <%= f.label :writing_period, class: "col-sm-2 control-label" %>
+    <div class="col-sm-1">
+      <%= f.number_field :writing_period, class: "form-control" %>
+    </div>
+  </div>
+  <div class="field form-group">
+    <%= f.label :voting_period, class: "col-sm-2 control-label" %>
+    <div class="col-sm-1">
+      <%= f.number_field :voting_period, class: "form-control" %>
+    </div>
+  </div>
+  <div class="actions form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <%= f.submit class: "btn btn-success" %>
+    </div>
+  </div>
 <% end %>

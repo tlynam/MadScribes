@@ -1,8 +1,19 @@
 class SentencesController < ApplicationController
   def create
-    Story.find(params[:story_id]).sentences.create **sentence_params.symbolize_keys, user: current_user
+    story = Story.find(params[:story_id])
+    story.sentences.create **sentence_params.symbolize_keys, user: current_user
 
-    redirect_to :back
+    redirect_to story
+  end
+
+  def vote
+    story = Story.find(params[:story_id])
+    sentence = story.sentences.find(params[:id])
+    sentence.votes << current_user.id
+    sentence.current_winner?
+
+    sentence.save
+    redirect_to story
   end
 
   def sentence_params

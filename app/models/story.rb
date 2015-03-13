@@ -5,17 +5,57 @@ class Story < ActiveRecord::Base
   validates_presence_of :title, :user
   validates_numericality_of :writing_period, :voting_period, :rounds
   validates_length_of :body, maximum: 10_000
+  #validate numbers are > 0
 
+  def round
+    if started_at
+      round = nil
+      time_ranges.each_pair{|k,v| round = v[0] if k.cover?(Time.now) }
+      round
+    end
+  end
 
-  # Returns an integer if there are still rounds to go, and we're not in a voting period
-  def current_round(include_voting_period: true)
+  def period
+    if started_at
+      round = nil
+      time_ranges.each_pair{|k,v| round = v[1] if k.cover?(Time.now) }
+      round
+    end
+  end
+
+  def active?
+    return true if started_at && round
+  end
+
+  def seconds_left_in_period
+    if started_at
+      key_range = nil
+      time_ranges.each_pair{|k,v| key_range = k if k.cover?(Time.now) }
+      (key_range.last - Time.now).to_i if key_range
+    end
+  end
+
+  def time_ranges
     if started_at
       round_duration = writing_period + voting_period
-      round = (Time.now - started_at) / round_duration
+      rounds.times.flat_map do |round|
+        beginning = started_at + (round_duration * round)
 
-      return if round > rounds
-      return if !include_voting_period && round.modulo(1) > 0.5
-      round.round
+        [
+          [beginning                   ..(beginning + writing_period), [round+1, :writing]],
+          [(beginning + writing_period)..(beginning + round_duration), [round+1, :voting]]
+        ]
+      end.to_h
+    end
+  end
+
+  def percent_story_left
+    if started_at == nil
+      return 0
+    elsif !active?
+      return 100
+    else
+     return ((round.to_f / rounds.to_f) * 100).to_i
     end
   end
 end

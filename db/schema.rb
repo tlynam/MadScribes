@@ -11,19 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150308194112) do
+ActiveRecord::Schema.define(version: 20150311233153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "sentences", force: :cascade do |t|
-    t.text     "body",                    null: false
-    t.integer  "user_id",                 null: false
-    t.integer  "story_id",                null: false
-    t.integer  "round",      default: 1,  null: false
-    t.integer  "votes",      default: [], null: false, array: true
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.text     "body",                       null: false
+    t.integer  "user_id",                    null: false
+    t.integer  "story_id",                   null: false
+    t.integer  "round",      default: 1,     null: false
+    t.integer  "votes",      default: [],    null: false, array: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "winner",     default: false, null: false
   end
 
   add_index "sentences", ["story_id"], name: "index_sentences_on_story_id", using: :btree

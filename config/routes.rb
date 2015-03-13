@@ -7,9 +7,13 @@ Rails.application.routes.draw do
   root 'stories#index'
 
   resources :stories do
-    resources :sentences
     member do
-      post 'start_story'
+      post :start
+    end
+    resources :sentences do
+      member do
+        post :vote
+      end
     end
   end
 

@@ -1,49 +1,102 @@
-<h1><%= @story.title %></h1>
-<h4>by <%= @story.user.email %></h4>
+<div class="page-header">
+  <h1><%= @story.title %> <small>by <%= @story.user.email %></small></h1>
+</div>
 
 <% if !@story.started_at && @story.user == current_user %>
-  <h3><%= button_to "Start Game?", action: :start_story %></h3>
-<% end %>
-
-<% if @story.started_at %>
-  Started at: <%= @story.started_at %>
+  <h3><%= button_to "Ready Player One?", start_story_path, class: "btn btn-success" %></h3>
 <% end %>
 
 <p><%= @story.body %></p>
-<div class="sentence_container">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Round</th>
-        <th>Author</th>
-        <th>Votes</th>
-        <th>Sentence</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @story.sentences.order(:round).each do |sentence| %>
-        <tr>
-          <td><%= sentence.round %></td>
-          <td><%= sentence.user.email %></td>
-          <td><%= sentence.votes.count %></td>
-          <td><%= sentence.body %></td>
-        </tr>
+<% unless @story.active? %>
+  <div class="sentence_container">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Round</th>
+            <th>Author</th>
+            <th>Votes</th>
+            <th>Sentence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @story.sentences.where(winner: true).order(:round).each do |sentence| %>
+            <tr>
+              <td><%= sentence.round %></td>
+              <td><%= sentence.user.email %></td>
+              <td><%= sentence.votes.count %></td>
+              <td><%= sentence.body %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<h3><%= 'Current Round: ' + @story.round.to_s if @story.active? %></h3>
+
+<% if @story.active? %>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= @story.percent_story_left %>%;">
+      <% if @story.percent_story_left > 15 %>
+        Story Completed <%= @story.percent_story_left %>%
+      <% elsif @story.percent_story_left == 100 %>
+        Last Round    
       <% end %>
-    </tbody>
-  </table>
-</div>
+    </div>
+  </div>
+<% end %>
 
-Submit a sentence before
+<% if @story.active? %>
+  <h3>Period Time:<div id="countdown"><%= @story.seconds_left_in_period %></div></h3>
+<% end %>
 
-<div id="countdown"><%= @story.writing_period %></div>
+<% if @story.period == :writing %>
+  <%= form_for @sentence, url: story_sentences_url(@story), :html => {:class => "form-horizontal"} do |f| %>
+    <h3>Submit a Sentence</h3>
+    <div class="field form-group">
+      <%= f.label :body, class: "col-sm-1 control-label" %>
+      <div class="col-sm-11">
+        <%= f.text_field :body, class: "form-control", :autofocus => true %>
+      </div>
+    </div>
+    <div class="actions form-group">
+      <div class="col-sm-offset-1 col-sm-11">
+        <%= f.submit "Submit", class: "btn btn-success" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
 
-Submit a sentence
-<%= form_for @sentence, url: story_sentences_url(@story) do |f| %>
-  <fieldset>
-    <%= f.label :body %>
-    <%= f.text_field :body %>
-  </fieldset>
-  <%= f.submit %>
+<% if @story.period == :voting %>
+  <h3>Vote now</h3>
+  <div class="sentence_container">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Round</th>
+            <th>Sentence</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @story.sentences.where(round: @story.round).order(created_at: :desc).each do |sentence| %>
+            <tr>
+              <td><%= sentence.round %></td>
+              <td><%= sentence.body %></td>
+              <td><%= button_to "Vote", vote_story_sentence_path(@story,sentence), method: :post, class: "btn btn-primary" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<% unless @story.active? %>
+  <h3>Game Over</h3>
 <% end %>
 
 <script type="text/javascript">
@@ -54,9 +107,10 @@ Submit a sentence
     seconds = document.getElementById('countdown').innerHTML;
     seconds = parseInt(seconds, 10);
  
-    if (seconds == 1) {
+    if (seconds == 0) {
       temp = document.getElementById('countdown');
-      temp.innerHTML = "Writing period over";
+      //temp.innerHTML = "Period Over";
+      window.location.reload();
       return;
     }
  
@@ -67,4 +121,8 @@ Submit a sentence
   } 
  
   countdown();
+
+  $('input:submit').click(function(){
+    $('input:submit').attr("disabled", true); 
+  });
 </script>

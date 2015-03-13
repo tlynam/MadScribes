@@ -6,7 +6,7 @@ class StoriesController < ApplicationController
   def show
     @story = Story.find params[:id]
 
-    @sentence = Sentence.new story_id: @story.id
+    @sentence = Sentence.new story_id: @story.id unless @sentence
   end
 
   def new
@@ -24,14 +24,14 @@ class StoriesController < ApplicationController
     end
   end
 
-  def story_params
-    params.require(:story).permit :id, :title, :writing_period, :voting_period, :rounds
-  end
-
-  def start_story
+  def start
     story = Story.find params[:id]
     story.update_attribute(:started_at, Time.now)
     redirect_to story
+  end
+
+  def story_params
+    params.require(:story).permit :id, :title, :writing_period, :voting_period, :rounds
   end
 
 end
