@@ -58,4 +58,17 @@ class Story < ActiveRecord::Base
      return ((round.to_f / rounds.to_f) * 100).to_i
     end
   end
+
+  def sentence_submitted?(current_user)
+    sentences.where(user: current_user, round: round).present?
+  end
+
+  def vote_submitted?(current_user)
+    sentences.where(round: round).pluck(:votes).flatten.include?(current_user.id)
+  end
+
+  def create_body
+    temp_round = active? ? round : (rounds + 1)
+    sentences.where("round < ?", temp_round).where(winner: true).order(:round).pluck(:body).to_sentence(words_connector: "  ", two_words_connector: "  ", last_word_connector: "  ")
+  end
 end

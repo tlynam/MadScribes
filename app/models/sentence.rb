@@ -6,6 +6,7 @@ class Sentence < ActiveRecord::Base
   validates_numericality_of :round
   # validate :sentence_must_be_submitted_in_current_writing_period
   # validate :cant_save_multiple_sentences_per_round
+  # add period at end of sentence if not present?
 
   before_validation :derive_round, if: :new_record?
   def derive_round
@@ -26,7 +27,7 @@ class Sentence < ActiveRecord::Base
 
   def current_winner?
     contenders = story.sentences.where(round: round)
-    if contenders.none?{ |s| s.votes.count > votes.count }
+    if contenders.all?{ |s| s.votes.count > votes.count } || contenders.count == 1
       contenders.update_all winner: false
       self.winner = true
     end
