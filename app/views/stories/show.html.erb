@@ -6,6 +6,10 @@
   <h3><%= button_to "Ready Player One?", start_story_path, class: "btn btn-success" %></h3>
 <% end %>
 
+<% if @story.started_at && !@story.round %>
+  <h3>Game Over</h3>
+<% end %>
+
 <p><%= @story.create_body %></p>
 <% unless @story.active? %>
   <div class="sentence_container">
@@ -67,7 +71,7 @@
     </div>
     <div class="actions form-group">
       <div class="col-sm-offset-1 col-sm-11">
-        <% button_text = @story.sentence_submitted?(current_user) ? "Can only submit one sentence per round" : "Submit" %>
+        <% button_text = @story.sentence_submitted?(current_user) ? "Submitted" : "Submit" %>
         <%= f.submit button_text, class: "btn btn-success", disabled: @story.sentence_submitted?(current_user) %>
       </div>
     </div>
@@ -91,7 +95,7 @@
             <tr>
               <td><%= sentence.round %></td>
               <td><%= sentence.body %></td>
-              <% button_text = @story.vote_submitted?(current_user) ? "Can only vote once per round" : "Vote" %>
+              <% button_text = @story.vote_submitted?(current_user) ? "Voted" : "Vote" %>
               <td><%= button_to button_text, vote_story_sentence_path(@story,sentence), method: :post, disabled: @story.vote_submitted?(current_user), class: "btn btn-primary" %></td>
             </tr>
           <% end %>
@@ -99,10 +103,6 @@
       </table>
     </div>
   </div>
-<% end %>
-
-<% if @story.started_at && !@story.round %>
-  <h3>Game Over</h3>
 <% end %>
 
 <script type="text/javascript">
