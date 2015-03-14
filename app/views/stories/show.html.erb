@@ -34,12 +34,14 @@
   </div>
 <% end %>
 
-<h3><div id="startCountdown"><%= 'Current Round: ' + @story.round.to_s if @story.active? %></div></h3>
+<h3><div id="startCountdown"><%= 'Round ' + @story.round.to_s if @story.active? %></div></h3>
 
 <% if @story.active? %>
   <div class="progress">
     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= @story.percent_story_left %>%;">
-      <% if @story.percent_story_left > 15 && @story.percent_story_left < 100 %>
+      <% if @story.round == 1 %>
+        First Round
+      <% elsif @story.percent_story_left > 15 && @story.percent_story_left < 100 %>
         Story Completed <%= @story.percent_story_left %>%
       <% elsif @story.percent_story_left == 100 %>
         Last Round    
@@ -49,8 +51,8 @@
 <% end %>
 
 <% if @story.active? %>
-  <h3>Period Time:<div id="countdown"><%= @story.seconds_left_in_period %></div></h3>
-<% else %>
+  <h3>Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span></h3>
+<% elsif !@story.started_at %>
   <div id="countdown" style="display:none;">-1</div>
 <% end %>
 
