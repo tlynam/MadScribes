@@ -7,6 +7,11 @@ class StoriesController < ApplicationController
     @story = Story.find params[:id]
 
     @sentence = Sentence.new story_id: @story.id unless @sentence
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => @story.active? }
+    end
   end
 
   def new

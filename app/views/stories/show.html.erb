@@ -34,7 +34,7 @@
   </div>
 <% end %>
 
-<h3><%= 'Current Round: ' + @story.round.to_s if @story.active? %></h3>
+<h3><div id="startCountdown"><%= 'Current Round: ' + @story.round.to_s if @story.active? %></div></h3>
 
 <% if @story.active? %>
   <div class="progress">
@@ -50,6 +50,8 @@
 
 <% if @story.active? %>
   <h3>Period Time:<div id="countdown"><%= @story.seconds_left_in_period %></div></h3>
+<% else %>
+  <div id="countdown" style="display:none;">-1</div>
 <% end %>
 
 <% if @story.period == :writing %>
@@ -104,16 +106,21 @@
 <script type="text/javascript">
   var seconds;
   var temp;
- 
   function countdown() {
     seconds = document.getElementById('countdown').innerHTML;
     seconds = parseInt(seconds, 10);
  
     if (seconds == 0) {
       temp = document.getElementById('countdown');
-      //temp.innerHTML = "Period Over";
       window.location.reload();
       return;
+    } else if (seconds < 0 && seconds % 4 == 0) {
+      $.getJSON("<%= story_url %>", { id: <%= @story.id %> } ).success(function(data){
+        if( data == true){
+          window.location.reload();
+          return;
+        }
+      });
     }
  
     seconds--;
@@ -121,8 +128,5 @@
     temp.innerHTML = seconds;
     timeoutMyOswego = setTimeout(countdown, 1000);
   } 
- 
   countdown();
-
-
 </script>

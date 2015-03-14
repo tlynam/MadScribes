@@ -27,7 +27,7 @@ class Sentence < ActiveRecord::Base
 
   def current_winner?
     contenders = story.sentences.where(round: round)
-    if contenders.all?{ |s| s.votes.count > votes.count } || contenders.count == 1
+    if contenders.none?{ |s| s.votes.count > votes.count }
       contenders.update_all winner: false
       self.winner = true
     end
