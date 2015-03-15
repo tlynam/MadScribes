@@ -60,7 +60,7 @@
   <div id="countdown" style="display:none;">-1</div>
 <% end %>
 
-<% if @story.period == :writing %>
+<% if current_user && @story.period == :writing %>
   <%= form_for @sentence, url: story_sentences_url(@story), html: {class: "form-horizontal"} do |f| %>
     <h3>Submit a Sentence</h3>
     <div class="field form-group">
@@ -78,7 +78,7 @@
   <% end %>
 <% end %>
 
-<% if @story.period == :voting %>
+<% if current_user && @story.period == :voting %>
   <h3>Vote now</h3>
   <div class="sentence_container">
     <div class="table-responsive">
