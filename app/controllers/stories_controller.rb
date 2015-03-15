@@ -5,13 +5,7 @@ class StoriesController < ApplicationController
 
   def show
     @story = Story.find params[:id]
-
     @sentence = Sentence.new story_id: @story.id unless @sentence
-
-    respond_to do |format|
-      format.html
-      format.json { render :json => @story.active? }
-    end
   end
 
   def new
@@ -33,6 +27,11 @@ class StoriesController < ApplicationController
     story = Story.find params[:id]
     story.update_attribute(:started_at, Time.now)
     redirect_to story
+  end
+
+  def is_active
+    story = Story.find params[:id]
+    render json: story.active?
   end
 
   def story_params

@@ -106,29 +106,27 @@
 <% end %>
 
 <script type="text/javascript">
-  var seconds;
-  var temp;
+  var seconds, element;
   function countdown() {
-    seconds = document.getElementById('countdown').innerHTML;
-    seconds = parseInt(seconds, 10);
- 
+    element = $('#countdown');
+    if (element.length)
+      seconds = parseInt(element.text(), 10);
+    else
+      return;
+
     if (seconds == 0) {
-      temp = document.getElementById('countdown');
       window.location.reload();
       return;
     } else if (seconds < 0 && seconds % 4 == 0) {
-      $.getJSON("<%= story_url %>", { id: <%= @story.id %> } ).success(function(data){
-        if( data == true){
+      $.get(location.pathname + '/is_active', function(data) {
+        if(data == true)
           window.location.reload();
-          return;
-        }
       });
     }
  
     seconds--;
-    temp = document.getElementById('countdown');
-    temp.innerHTML = seconds;
-    timeoutMyOswego = setTimeout(countdown, 1000);
+    element.text(seconds);
+    setTimeout(countdown, 1000);
   } 
-  countdown();
+  setTimeout(countdown, 1000);
 </script>

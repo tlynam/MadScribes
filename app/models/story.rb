@@ -8,30 +8,24 @@ class Story < ActiveRecord::Base
   #validate numbers are > 0
 
   def round
-    if started_at
-      round = nil
-      time_ranges.each_pair{|k,v| round = v[0] if k.cover?(Time.now) }
-      round
+    if started_at && range = find_time_range
+      range[1][0]
     end
   end
 
   def period
-    if started_at
-      round = nil
-      time_ranges.each_pair{|k,v| round = v[1] if k.cover?(Time.now) }
-      round
+    if started_at && range = find_time_range
+      range[1][1]
     end
   end
 
   def active?
-    return true if started_at && round
+    !!(started_at && round)
   end
 
   def seconds_left_in_period
-    if started_at
-      key_range = nil
-      time_ranges.each_pair{|k,v| key_range = k if k.cover?(Time.now) }
-      (key_range.last - Time.now).to_i if key_range
+    if started_at && range = find_time_range
+      (range[0].last - Time.now).to_i
     end
   end
 
@@ -47,6 +41,10 @@ class Story < ActiveRecord::Base
         ]
       end.to_h
     end
+  end
+
+  def find_time_range(time: Time.now)
+    time_ranges.find{ |range, _| range.cover? time }
   end
 
   def percent_story_left
