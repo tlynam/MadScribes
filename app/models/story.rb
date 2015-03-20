@@ -1,6 +1,7 @@
 class Story < ActiveRecord::Base
   belongs_to :user
   has_many :sentences
+  has_many :subscriptions
 
   validates_presence_of :title, :user
   validates_numericality_of :writing_period, :voting_period, :rounds, greater_than: 0
@@ -17,6 +18,12 @@ class Story < ActiveRecord::Base
     ['12 hours', 12.hours],
     ['24 hours', 24.hours]
   ]
+
+  after_save :subscribe_author
+
+  def subscribe_author
+    subscriptions.create user: user
+  end
 
 
   def round

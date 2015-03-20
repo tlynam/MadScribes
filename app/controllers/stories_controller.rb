@@ -34,6 +34,12 @@ class StoriesController < ApplicationController
     render json: story.active?
   end
 
+  def subscribe
+    story = Story.find params[:id]
+    story.subscriptions.create user: current_user
+    redirect_to story
+  end
+
   def story_params
     params.require(:story).permit :id, :title, :writing_period, :voting_period, :rounds
   end

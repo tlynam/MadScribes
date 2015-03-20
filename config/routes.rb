@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :stories do
     member do
       post :start
+      post :subscribe
       get :is_active
     end
     resources :sentences do
