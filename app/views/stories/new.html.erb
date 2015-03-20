@@ -21,18 +21,16 @@
     </div>
   </div>
   <div class="field form-group">
-    <%= f.label :writing_period, class: "col-sm-2 control-label" %>
+    <%= f.label :writing_period, "Writing Time", class: "col-sm-2 control-label" %>
     <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
-      <%= f.number_field :writing_period, class: "form-control" %>
+      <%= f.select :writing_period, options_for_select(Story::TIME_PERIODS), class: "form-control" %>
     </div>
-    <%= f.label :writing_period, "Seconds", class: "control-label" %>
   </div>
   <div class="field form-group">
-    <%= f.label :voting_period, class: "col-sm-2 control-label" %>
-    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
-      <%= f.number_field :voting_period, class: "form-control" %>
+    <%= f.label :voting_period, "Voting Time", class: "col-sm-2 control-label" %>
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+      <%= f.select :voting_period, options_for_select(Story::TIME_PERIODS), class: "form-control" %>
     </div>
-    <%= f.label :voting_period, "Seconds", class: "control-label" %>
   </div>
   <div class="actions form-group">
     <div class="col-sm-offset-2 col-sm-10">

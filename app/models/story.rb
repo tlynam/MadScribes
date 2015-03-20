@@ -3,9 +3,21 @@ class Story < ActiveRecord::Base
   has_many :sentences
 
   validates_presence_of :title, :user
-  validates_numericality_of :writing_period, :voting_period, :rounds
+  validates_numericality_of :writing_period, :voting_period, :rounds, greater_than: 0
   validates_length_of :body, maximum: 10_000
-  #validate numbers are > 0
+
+  TIME_PERIODS = [
+    ['1 minute', 1.minute],
+    ['15 seconds', 15.seconds],
+    ['30 seconds', 30.seconds],
+    ['5 mintues', 5.minutes],
+    ['30 minutes', 30.minutes],
+    ['1 hour', 1.hour],
+    ['6 hours', 6.hours],
+    ['12 hours', 12.hours],
+    ['24 hours', 24.hours]
+  ]
+
 
   def round
     if started_at && range = find_time_range
