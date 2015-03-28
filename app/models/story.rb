@@ -88,4 +88,12 @@ class Story < ActiveRecord::Base
     temp_round = active? ? round : (rounds + 1)
     sentences.where("round < ?", temp_round).where(winner: true).order(:round).pluck(:body).to_sentence(words_connector: "  ", two_words_connector: "  ", last_word_connector: "  ")
   end
+
+  def leaderboard
+    sentences.includes(:user).group_by(&:user).map do |user, sentences|
+      score = sentences.sum{ |s| s.votes.count }
+      [score, user]
+    end.sort.reverse
+  end
+
 end

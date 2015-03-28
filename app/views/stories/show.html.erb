@@ -45,6 +45,30 @@
   </div>
 <% end %>
 
+<% if @story.started_at && !@story.round %>
+  <h3>Leaderboard</h3>
+  <div class="sentence_container">
+    <div class="table-responsive">
+      <table class="table table-hover" style="width: 30%;">
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @story.leaderboard.each do |score, user| %>
+            <tr class="<%= "success" if user == current_user %>">
+              <td><%= score %></td>
+              <td><%= user.display_name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
 <h3><div id="startCountdown"><%= 'Round ' + @story.round.to_s if @story.active? %></div></h3>
 
 <% if @story.active? %>
