@@ -37,6 +37,7 @@ gem 'puma'
 # gem 'capistrano-rails', group: :development
 
 gem 'devise'
+gem 'rollbar'
 
 gem 'rails_12factor', group: :production
 
