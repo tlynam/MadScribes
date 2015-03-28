@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h3>Hello <%= @user.display_name %>,</h3>
+    <p>
+      You have subscribed to the story: <%= @story.title %><br>
+      It's time to rejoice and rejoin!
+    </p>
+    <p>
+      It's the <%= @story.period %> period in the story, visit <a href="<%= story_url(@story, host: 'madscribes.com') %>"><%= story_url(@story, host: 'madscribes.com') %></a>
+    </p>
+    <p>Thanks and have a great day!</p>
+  </body>
+</html>

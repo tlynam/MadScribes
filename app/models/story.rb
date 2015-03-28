@@ -25,7 +25,17 @@ class Story < ActiveRecord::Base
     subscriptions.create user: user
   end
 
+  scope :long_running, ->{ where "(writing_period + voting_period) > ?", 30.minutes }
+  scope :active, ->{ where "extract(epoch from started_at) + (writing_period + voting_period) * rounds > extract(epoch from now())" }
 
+  def self.send_emails
+    active.long_running.each do |story|
+      if (Time.now - story.find_time_range[0].first) < 10.minutes
+        NotificationMailer.notification_email(story).deliver_now
+      end
+    end
+  end
+  
   def round
     if started_at && range = find_time_range
       range[1][0]
