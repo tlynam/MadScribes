@@ -5,3 +5,5 @@
     <li><%= link_to story.title, story %></li>
   <% end %>
 </ul>
+
+<%= will_paginate @stories, renderer: BootstrapPagination::Rails %>

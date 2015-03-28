@@ -1,6 +1,6 @@
 class StoriesController < ApplicationController
   def index
-    @stories = Story.order(created_at: :desc).limit 5
+    @stories = Story.paginate(page: params[:page], per_page:  10).order('created_at DESC')
   end
 
   def show
