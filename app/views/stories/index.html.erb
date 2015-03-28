@@ -7,3 +7,25 @@
 </ul>
 
 <%= will_paginate @stories, renderer: BootstrapPagination::Rails %>
+
+<h3>Leaderboard</h3>
+<div class="sentence_container">
+  <div class="table-responsive">
+    <table class="table table-hover" style="width: 30%;">
+      <thead>
+        <tr>
+          <th>Score</th>
+          <th>Author</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% User.all.sort_by {|user| user.score}.reverse.take(10).each do |user| %>
+          <tr class="<%= "success" if user == current_user %>">
+            <td><%= user.score %></td>
+            <td><%= user.display_name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
