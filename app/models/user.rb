@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
 
   validates_length_of :username, maximum: 20
 
+  def score
+    sentences.sum 'array_length(votes, 1)'
+  end
+
   def display_name 
     username.presence || email
   end

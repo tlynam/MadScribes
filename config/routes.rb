@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users, only: :show
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
