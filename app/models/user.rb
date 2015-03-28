@@ -7,4 +7,10 @@ class User < ActiveRecord::Base
   has_many :stories
   has_many :sentences
   has_many :subscriptions
+
+  validates_length_of :username, maximum: 20
+
+  def display_name 
+    username.presence || email
+  end
 end

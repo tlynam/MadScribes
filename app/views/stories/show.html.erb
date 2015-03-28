@@ -3,6 +3,7 @@
     <%= @story.title %> <small>by <%= @story.user.email %></small>
     <% if current_user && current_user.subscriptions.where(story: @story).none? %>
       <%= button_to "Subscribe", subscribe_story_path, class: "btn btn-default" %>
+    <%= @story.title %> <small>by <%= @story.user.display_name %></small>
     <% end %>
   </h1>
 </div>
@@ -33,6 +34,7 @@
             <tr>
               <td><%= sentence.round %></td>
               <td><%= sentence.user.email %></td>
+              <td><%= sentence.user.display_name %></td>
               <td><%= sentence.votes.count %></td>
               <td><%= sentence.body %></td>
             </tr>
