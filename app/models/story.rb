@@ -1,7 +1,7 @@
 class Story < ActiveRecord::Base
   belongs_to :user
-  has_many :sentences
-  has_many :subscriptions
+  has_many :sentences, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   validates_presence_of :title, :user
   validates_numericality_of :writing_period, :voting_period, :rounds, greater_than: 0
