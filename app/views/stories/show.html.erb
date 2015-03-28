@@ -1,9 +1,8 @@
 <div class="page-header">
   <h1>
-    <%= @story.title %> <small>by <%= @story.user.email %></small>
-    <% if current_user && current_user.subscriptions.where(story: @story).none? %>
-      <%= button_to "Subscribe", subscribe_story_path, class: "btn btn-default" %>
     <%= @story.title %> <small>by <%= @story.user.display_name %></small>
+    <% if current_user && current_user.subscriptions.where(story: @story).none? && current_user != @story.user %>
+      <%= button_to "Subscribe", subscribe_story_path, class: "btn btn-success" %>
     <% end %>
   </h1>
 </div>
@@ -20,7 +19,7 @@
 <% unless @story.active? %>
   <div class="sentence_container">
     <div class="table-responsive">
-      <table class="table">
+      <table class="table table-hover">
         <thead>
           <tr>
             <th>Round</th>
@@ -31,9 +30,8 @@
         </thead>
         <tbody>
           <% @story.sentences.where(winner: true).order(:round).each do |sentence| %>
-            <tr>
+            <tr class="<%= "success" if sentence.user == current_user %>">
               <td><%= sentence.round %></td>
-              <td><%= sentence.user.email %></td>
               <td><%= sentence.user.display_name %></td>
               <td><%= sentence.votes.count %></td>
               <td><%= sentence.body %></td>
@@ -110,7 +108,7 @@
 <% end %>
 
 <% if current_user && @story.period == :voting %>
-  <h3>Vote now</h3>
+  <h3>Vote Now</h3>
   <div class="sentence_container">
     <div class="table-responsive">
       <table class="table">

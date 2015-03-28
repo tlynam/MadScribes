@@ -1,6 +1,6 @@
 <%= link_to "Create Story", new_story_path, class: "btn btn-success" %>
 
-<ul class="mtm">
+<ul style="margin-top:20px;">
   <% @stories.each do |story| %>
     <li><%= link_to story.title, story %></li>
   <% end %>

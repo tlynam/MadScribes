@@ -28,8 +28,13 @@
   </div>
   <div class="field form-group">
     <%= f.label :voting_period, "Voting Time", class: "col-sm-2 control-label" %>
-    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
       <%= f.select :voting_period, options_for_select(Story::TIME_PERIODS), class: "form-control" %>
+    </div>
+  </div>
+  <div class="field form-group">
+    <div class="col-sm-offset-2 col-md-8 col-sm-8 col-xs-8">
+        <p>When Writing + Voting Time > 30 minutes, an email notification will be sent to the story subscribers within 10 minutes of the start of each writing or voting round</p>
     </div>
   </div>
   <div class="actions form-group">
