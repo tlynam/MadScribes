@@ -4,19 +4,27 @@ class Sentence < ActiveRecord::Base
 
   validates_presence_of :user, :body
   validates_numericality_of :round
-  validate :sentence_must_be_submitted_in_current_writing_period
+  validate :sentence_must_be_submitted_in_correct_period
   validates_uniqueness_of :round, scope: [:user_id, :story_id], message:
     "can't add multiple sentences per round"
-  # add period at end of sentence if not present?
+  before_save :add_period, if: "body_changed?"
 
   before_validation :derive_round, if: :new_record?
   def derive_round
     self.round = story.round
   end
 
-  def sentence_must_be_submitted_in_current_writing_period
-    unless story.period == :writing
+  def sentence_must_be_submitted_in_correct_period
+    if body_changed? && story.period == :voting
       errors.add(:body, "can't add sentence when it isn't time to write")
+    elsif votes_changed? && story.period == :writing
+      errors.add(:body, "can't vote a sentence when it isn't time to vote")
+    end
+  end
+
+  def add_period
+    unless body.last =~ /\W/
+      body << "."
     end
   end
 
