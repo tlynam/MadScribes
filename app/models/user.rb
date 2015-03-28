@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   has_many :subscriptions
 
   validates_length_of :username, maximum: 20
+  validates :email, uniqueness: true
+  validates :username, uniqueness: true
 
   def score
     sentences.sum 'array_length(votes, 1)'
