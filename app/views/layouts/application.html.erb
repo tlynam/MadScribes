@@ -11,13 +11,13 @@
     <nav class="navbar-collapse bs-navbar-collapse collapse" aria-expanded="false">
       <div class="container">
         <div class="navbar-header">
-          <h2><%= link_to "MadScribes", root_url %></h2>
+          <% color = ["red", "green", "blue"].sample %>
+          <h2><%= link_to "MadScribes", root_url, class: "header_#{color}" %></h2>
         </div>
         <ul class="nav navbar-nav">
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <% if signed_in? %>
-            <li class="profile"><%= current_user.email %></li>
             <li><%= link_to current_user.display_name, user_path(current_user) %></li>
             <li><%= link_to "Log out", destroy_user_session_path, method: :delete %></li>
           <% else %>
