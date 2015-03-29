@@ -10,7 +10,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'nobody_home@madscribes.com'
+  config.mailer_sender = 'muse_formerly_known_as_thalia@madscribes.com'
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'Devise::Mailer'
