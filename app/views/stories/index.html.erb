@@ -1,31 +1,63 @@
-<%= link_to "Create Story", new_story_path, class: "btn btn-success" %>
+<h1>Create stories with friends in real time</h1>
 
-<ul style="margin-top:20px;">
-  <% @stories.each do |story| %>
-    <li><%= link_to story.title, story %></li>
-  <% end %>
-</ul>
+<%= image_tag("header.jpg") %> </br>
 
-<%= will_paginate @stories, renderer: BootstrapPagination::Rails %>
+<div class="col-sm-8">
+  <h4>
+    The game is simple, yet really fun! Each round you submit a sentence. Then everyone votes on the sentence they like the best and the winning sentence is added to the story. You recieve a point for each vote.
+  </h4>
+</div>
 
-<h3>Leaderboard</h3>
-<div class="sentence_container">
-  <div class="table-responsive">
-    <table class="table table-hover" style="width: 30%;">
-      <thead>
-        <tr>
-          <th>Score</th>
-          <th>Author</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% User.all.sort_by {|user| user.score}.reverse.take(10).each do |user| %>
-          <tr class="<%= "success" if user == current_user %>">
-            <td><%= user.score %></td>
-            <td><%= user.display_name %></td>
+<div class="col-sm-8">
+  <%= link_to "Create Story", new_story_path, class: "btn btn-success", style: "margin-top: 15px;" %>
+</div>
+
+<div class="col-sm-7">
+  <h3>Live Stories</h3>
+  <ul style="margin-top:20px;">
+    <% if @live_stories.none? %>
+      <h4>There are currently no live stories, hmm</h4>
+      <h4>How about creating a new story and sharing the url?</h4>
+    <% end %>
+    <% @live_stories.each do |story| %>
+      <li><%= link_to story.title, story %></li>
+    <% end %>
+  </ul>
+
+  <%= will_paginate @live_stories, renderer: BootstrapPagination::Rails %>
+</div>
+
+<div class="col-sm-7">
+  <h3>All Stories</h3>
+  <ul style="margin-top:20px;">
+    <% @stories.each do |story| %>
+      <li><%= link_to story.title, story %></li>
+    <% end %>
+  </ul>
+
+  <%= will_paginate @stories, renderer: BootstrapPagination::Rails %>
+</div>
+
+<div class="col-sm-5">
+  <h3>Leaderboard</h3>
+  <div class="sentence_container">
+    <div class="table-responsive">
+      <table class="table table-hover" style="width: 30%;">
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Author</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% User.all.sort_by {|user| user.score}.reverse.take(15).each do |user| %>
+            <tr class="<%= "success" if user == current_user %>">
+              <td><%= user.score %></td>
+              <td><%= user.display_name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
