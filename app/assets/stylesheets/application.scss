@@ -19,32 +19,14 @@ form .field_with_errors {
   display: inline;
 }
 
-a.header_red:hover {
-  color: Tomato;
-  text-decoration: none;
+$colors: ("red": Tomato, "green": LimeGreen, "blue": CornflowerBlue);
+
+@each $color_name, $color in $colors {
+  a.header-#{$color_name} {
+    color: $color;
+  }
 }
 
-a.header_red {
-  color: Tomato;
-  text-decoration: none;
-}
-
-a.header_green:hover {
-  color: LimeGreen;
-  text-decoration: none;
-}
-
-a.header_green {
-  color: LimeGreen;
-  text-decoration: none;
-}
-
-a.header_blue:hover {
-  color: CornflowerBlue;
-  text-decoration: none;
-}
-
-a.header_blue {
-  color: CornflowerBlue;
+a[class|="header"] {
   text-decoration: none;
 }
