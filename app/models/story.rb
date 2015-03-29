@@ -28,7 +28,15 @@ class Story < ActiveRecord::Base
   end
 
   scope :long_running, ->{ where "(writing_period + voting_period) > ?", 30.minutes }
-  scope :active, ->{ where "extract(epoch from started_at) + (writing_period + voting_period) * rounds > extract(epoch from now())" }
+
+  duration_sql = <<-SQL
+    extract(epoch from started_at) +
+    (writing_period + voting_period)
+    * rounds
+  SQL
+
+  scope :active,   ->{ where "#{duration_sql} > extract(epoch from now())" }
+  scope :finished, ->{ where "#{duration_sql} < extract(epoch from now())" }
 
   def self.send_emails
     active.long_running.each do |story|
@@ -84,7 +92,7 @@ class Story < ActiveRecord::Base
     elsif !active?
       return 100
     else
-     return ((round.to_f / rounds.to_f) * 100).to_i
+      return ((round.to_f / rounds.to_f) * 100).to_i
     end
   end
 
@@ -97,8 +105,7 @@ class Story < ActiveRecord::Base
   end
 
   def create_body
-    temp_round = active? ? round : (rounds + 1)
-    sentences.where("round < ?", temp_round).where(winner: true).order(:round).pluck(:body).to_sentence(words_connector: "  ", two_words_connector: "  ", last_word_connector: "  ")
+    sentences.where(winner: true).order(:round).pluck(:body).join(" ")
   end
 
   def leaderboard
