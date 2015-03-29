@@ -1,6 +1,6 @@
 class StoriesController < ApplicationController
   def index
-    @stories = Story.paginate(page: params[:page], per_page:  10).order('created_at DESC')
+    @stories = Story.search(params[:q]).paginate(page: params[:page], per_page:  10).order('created_at DESC')
     @live_stories = Story.active.paginate(page: params[:page], per_page:  10).order('created_at DESC')
   end
 

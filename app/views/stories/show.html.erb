@@ -15,7 +15,7 @@
   <h3>Game Over</h3>
 <% end %>
 
-<p><%= @story.create_body %></p>
+<p><%= @story.body || @story.create_body %></p>
 <% unless @story.active? %>
   <div class="sentence_container">
     <div class="table-responsive">

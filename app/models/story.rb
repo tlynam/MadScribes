@@ -38,11 +38,19 @@ class Story < ActiveRecord::Base
   scope :active,   ->{ where "#{duration_sql} > extract(epoch from now())" }
   scope :finished, ->{ where "#{duration_sql} < extract(epoch from now())" }
 
+  scope :search, -> q { where "to_tsvector(body) @@ to_tsquery(?)", q if q.present? }
+
   def self.send_emails
     active.long_running.each do |story|
       if (Time.now - story.find_time_range[0].first) < 10.minutes
         NotificationMailer.notification_email(story).deliver_now
       end
+    end
+  end
+
+  def self.populate_body
+    finished.where(body: nil).each do |story|
+      story.update_attributes! body: story.create_body
     end
   end
   
