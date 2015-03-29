@@ -10,7 +10,7 @@ class SentencesController < ApplicationController
     story = Story.find(params[:story_id])
     sentence = story.sentences.find(params[:id])
     sentence.votes << current_user.id
-    sentence.current_winner? unless sentence.winner?
+    sentence.update_current_winner unless sentence.winner?
 
     sentence.save
     redirect_to story

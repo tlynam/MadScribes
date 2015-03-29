@@ -7,7 +7,7 @@ class Sentence < ActiveRecord::Base
   validate :sentence_must_be_submitted_in_correct_period
   validates_uniqueness_of :round, scope: [:user_id, :story_id], message:
     "can't add multiple sentences per round"
-  before_save :add_period, if: "body_changed?"
+  before_save :add_period, if: :body_changed?
 
   before_validation :derive_round, if: :new_record?
   def derive_round
@@ -23,12 +23,10 @@ class Sentence < ActiveRecord::Base
   end
 
   def add_period
-    unless body.last =~ /\W/
-      body << "."
-    end
+    body << '.' unless %w[. ? !].include? body.last
   end
 
-  def current_winner?
+  def update_current_winner
     contenders = story.sentences.where(round: round)
     if contenders.none?{ |s| s.votes.count > votes.count }
       contenders.update_all winner: false
