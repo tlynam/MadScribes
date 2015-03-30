@@ -16,32 +16,31 @@
 <% end %>
 
 <p><%= @story.body || @story.create_body %></p>
-<% unless @story.active? %>
-  <div class="sentence_container">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Round</th>
-            <th>Author</th>
-            <th>Votes</th>
-            <th>Sentence</th>
+
+<div class="sentence_container">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Round</th>
+          <th>Author</th>
+          <th>Votes</th>
+          <th>Sentence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @story.sentences.where(winner: true).order(:round).each do |sentence| %>
+          <tr class="<%= "success" if sentence.user == current_user %>">
+            <td><%= sentence.round %></td>
+            <td><%= sentence.user.display_name %></td>
+            <td><%= sentence.votes.count %></td>
+            <td><%= sentence.body %></td>
           </tr>
-        </thead>
-        <tbody>
-          <% @story.sentences.where(winner: true).order(:round).each do |sentence| %>
-            <tr class="<%= "success" if sentence.user == current_user %>">
-              <td><%= sentence.round %></td>
-              <td><%= sentence.user.display_name %></td>
-              <td><%= sentence.votes.count %></td>
-              <td><%= sentence.body %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-<% end %>
+</div>
 
 <% if @story.started_at && !@story.round %>
   <h3>Leaderboard</h3>
