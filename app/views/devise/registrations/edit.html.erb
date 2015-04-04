@@ -34,7 +34,7 @@
           <h3 class="panel-title">Change Password</h3>
         </div>
         <div class="panel-body">
-          <p><i>Leave blank if you don't want to change it</i></p>
+          <p><i>Leave both blank if you don't want to change it</i></p>
           <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
             <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
           <% end %>
