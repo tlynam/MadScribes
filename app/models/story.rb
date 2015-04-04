@@ -45,7 +45,9 @@ class Story < ActiveRecord::Base
   def self.send_emails
     active.long_running.each do |story|
       if (Time.now - story.find_time_range[0].first) < 10.minutes
-        NotificationMailer.notification_email(story).deliver_now
+        story.subscriptions.each do |subscription|
+          NotificationMailer.notification_email(story,subscription.user).deliver_now
+        end
       end
     end
   end
