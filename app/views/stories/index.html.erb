@@ -53,7 +53,7 @@
   <h3>Leaderboard</h3>
   <div class="sentence_container">
     <div class="table-responsive">
-      <table class="table table-hover" style="width: 30%;">
+      <table class="table table-hover" style="width: 30%; cursor:pointer;"">
         <thead>
           <tr>
             <th>Score</th>
@@ -62,7 +62,7 @@
         </thead>
         <tbody>
           <% User.all.sort_by {|user| user.score}.reverse.take(15).each do |user| %>
-            <tr class="<%= "success" if user == current_user %>">
+            <tr class="<%= "success" if user == current_user %>" data-link="<%= user_path(user) %>">
               <td><%= user.score %></td>
               <td><%= user.display_name %></td>
             </tr>
