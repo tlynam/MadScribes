@@ -88,6 +88,13 @@
   <div id="countdown" style="display:none;">-1</div>
 <% end %>
 
+<h3>Story Subscribers</h3>
+<ul>
+  <% @story.subscriptions.each do |subscription| %>
+    <li><%= content_tag(:a, subscription.user.display_name, href: user_url(subscription.user)) %></li>
+  <% end %>
+</ul>
+
 <% if current_user && @story.period == :writing %>
   <%= form_for @sentence, url: story_sentences_url(@story), html: {class: "form-horizontal"} do |f| %>
     <h3>Submit a Sentence</h3>
