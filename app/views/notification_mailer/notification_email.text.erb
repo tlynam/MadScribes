@@ -5,5 +5,7 @@ You have subscribed to the story: <%= @story.title %>
 It's time to rejoice and rejoin!
  
 It's the <%= @story.period %> period in the story, visit <a href="<%= story_url(@story, host: 'madscribes.com') %>"><%= story_url(@story, host: 'madscribes.com') %></a>
+
+Period ends <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
  
 Thanks and have a great day!

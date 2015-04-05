@@ -31,6 +31,10 @@ class Story < ActiveRecord::Base
 
   scope :long_running, ->{ where "(writing_period + voting_period) > ?", 30.minutes }
 
+  def long_running?
+    writing_period + voting_period > 30.minutes
+  end
+
   duration_sql = <<-SQL
     extract(epoch from started_at) +
     (writing_period + voting_period)

@@ -83,7 +83,12 @@
 <% end %>
 
 <% if @story.active? %>
-  <h3>Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span></h3>
+  <h3>
+    Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span>
+    <% if @story.long_running? %>
+      <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
+    <% end %>
+  </h3>
 <% elsif !@story.started_at %>
   <div id="countdown" style="display:none;">-1</div>
 <% end %>
