@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post :start
       post :subscribe
       get :is_active
+      get :chat
     end
     resources :sentences do
       member do

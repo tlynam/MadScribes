@@ -1,4 +1,9 @@
+require 'pg_notify'
+
 class StoriesController < ApplicationController
+  include Tubesock::Hijack
+  include PGNotify
+
   def index
     @stories = Story.search(params[:q]).paginate(page: params[:page], per_page:  10).order('created_at DESC')
     @live_stories = Story.active.paginate(page: params[:page], per_page:  10).order('created_at DESC')
@@ -41,8 +46,25 @@ class StoriesController < ApplicationController
     redirect_to story
   end
 
+  def chat
+    hijack do |websocket|
+      websocket.onopen do
+        listen_for 'chat' do |payload|
+          if payload[:story_id] == params[:id]
+            websocket.send_data payload[:message]
+          end
+        end
+      end
+
+      websocket.onmessage do |data|
+        notify 'chat', story_id: params[:id], message: data
+      end
+    end
+  end
+
+  private
+
   def story_params
     params.require(:story).permit :id, :title, :writing_period, :voting_period, :rounds
   end
-
 end
