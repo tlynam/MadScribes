@@ -23,7 +23,7 @@ class Story < ActiveRecord::Base
     ['24 hours', 24.hours]
   ]
 
-  after_save :subscribe_author
+  after_create :subscribe_author
 
   def subscribe_author
     subscriptions.create user: user
@@ -117,7 +117,9 @@ class Story < ActiveRecord::Base
   end
 
   def create_body
-    sentences.where(winner: true).order(:round).pluck(:body).join(" ")
+    scope = sentences.where(winner: true)
+    scope = scope.where "round < ?", round if round
+    scope.order(:round).pluck(:body).join(" ")
   end
 
   def leaderboard
