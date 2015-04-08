@@ -13,12 +13,46 @@
 </div>
 
 <div class="col-sm-7">
+  <h3>Pending Stories</h3>
+  <% if @pending_stories.none? %>
+    <h4>There are currently no pending stories, hmm</h4>
+    <h4>How about creating a new story and sharing the url?</h4>
+  <% else %>
+    <h4>These stories haven't started yet</h4>
+  <% end %>
+  <div class="table-responsive">
+    <table class="table table-hover" style="width: 30%; cursor:pointer;">
+      <thead>
+        <tr>
+          <th>Story</th>
+          <th>Subscribers</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pending_stories.each do |story| %>
+          <tr>
+          <tr <%= "class=success" if story.user == current_user %> data-link="<%= story_url(story) %>" >
+            <td><%= story.title %></td>
+            <td>
+              <%= story.subscriptions.count %>
+              <%= story.subscriptions.map{|subscription| subscription.user.display_name}.to_sentence %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= will_paginate @pending_stories, renderer: BootstrapPagination::Rails %>
+</div>
+
+<div class="col-sm-7">
   <h3>Live Stories</h3>
+  <% if @live_stories.none? %>
+    <h4>There are currently no live stories, hmm</h4>
+    <h4>How about creating a new story and sharing the url?</h4>
+  <% end %>
   <ul style="margin-top:20px;">
-    <% if @live_stories.none? %>
-      <h4>There are currently no live stories, hmm</h4>
-      <h4>How about creating a new story and sharing the url?</h4>
-    <% end %>
     <% @live_stories.each do |story| %>
       <li><%= link_to story.title, story %></li>
     <% end %>

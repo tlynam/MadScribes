@@ -43,6 +43,7 @@ class Story < ActiveRecord::Base
 
   scope :active,   ->{ where "#{duration_sql} > extract(epoch from now())" }
   scope :finished, ->{ where "#{duration_sql} < extract(epoch from now())" }
+  scope :pending,  ->{ where started_at: nil }
 
   scope :search, -> q { where "to_tsvector(body) @@ to_tsquery(?)", q if q.present? }
 
