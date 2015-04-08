@@ -16,11 +16,11 @@ class Sentence < ActiveRecord::Base
 
   def sentence_must_be_submitted_in_correct_period
     if body_changed? && story.period == :voting
-      errors.add(:body, "can't add sentence when it isn't time to write")
+      errors.add(:base, "can't add sentence when it isn't time to write")
     elsif votes_changed? && story.period == :writing
-      errors.add(:body, "can't vote a sentence when it isn't time to vote")
+      errors.add(:base, "can't vote on a sentence when it isn't time to vote")
     elsif !story.period
-      errors.add(:body, "can't add sentence when story isn't active")
+      errors.add(:base, "can't add sentence when story isn't active")
     end
   end
 
