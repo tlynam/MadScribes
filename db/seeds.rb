@@ -26,8 +26,9 @@ TEXT
 
 user = User.create! email: "Test@test.com", password: "password123", password_confirmation: "password123"
 
-story = Story.create! title: 'The Day the Sun Took a Break', user: user, body: sentences.join("\n")
+story = Story.create! title: 'The Day the Sun Took a Break', user: user, started_at: Time.now, body: sentences.join("\n")
 
 sentences.each_with_index do |sentence, index|
-  story.sentences.create! body: sentence, user: user, round: index+1, votes: [user.id]
+  sentence = story.sentences.build body: sentence, user: user, round: index+1, votes: [user.id]
+  sentence.save validate: false
 end
