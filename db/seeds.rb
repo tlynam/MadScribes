@@ -31,4 +31,3 @@ story = Story.create! title: 'The Day the Sun Took a Break', user: user, body: s
 sentences.each_with_index do |sentence, index|
   story.sentences.create! body: sentence, user: user, round: index+1, votes: [user.id]
 end
-
