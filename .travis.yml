@@ -1,1 +1,1 @@
-before_install: rake db:setup
+before_script: rake db:setup
