@@ -19,6 +19,8 @@ class Sentence < ActiveRecord::Base
       errors.add(:body, "can't add sentence when it isn't time to write")
     elsif votes_changed? && story.period == :writing
       errors.add(:body, "can't vote a sentence when it isn't time to vote")
+    elsif !story.period
+      errors.add(:body, "can't add sentence when story isn't active")
     end
   end
 

@@ -14,7 +14,7 @@ describe SentencesController do
     it 'saves when story has started' do
       post :create, sentence: {body: 'foo'}, story_id: story.id
       expect(response.location).to eq previous_page
-      expect(story.sentences.first.body).to eq 'foo'
+      expect(story.sentences.first.body).to eq 'foo.'
     end
     it 'does not save when story has not started' do
       story.update! started_at: nil
@@ -24,7 +24,7 @@ describe SentencesController do
       expect(story.sentences.none?).to eq true
     end
     it 'does not save when story has ended' do
-      story.update! started_at: 15.minutes.ago
+      story.update! started_at: 1.day.ago
 
       post :create, sentence: {body: 'foo'}, story_id: story.id
       expect(response.location).to eq previous_page
