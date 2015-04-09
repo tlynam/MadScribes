@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 ruby "2.2.0"
 
 gem 'rails', '~> 4.2.0'
+gem 'puma'
+gem 'rack-timeout'
 gem 'pg'
 gem 'bootstrap-sass'
 gem 'tubesock'
@@ -14,7 +16,6 @@ gem 'will_paginate-bootstrap'
 
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'puma'
 
 gem 'devise'
 gem 'rollbar'
@@ -22,7 +23,6 @@ gem 'rollbar'
 gem 'rails_12factor', group: :production
 
 group :development, :test do
-  gem 'byebug'
   gem 'pry-rails'
   gem 'pry'
   gem "binding_of_caller"
