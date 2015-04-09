@@ -30,7 +30,7 @@
       </thead>
       <tbody>
         <% @story.sentences.where(winner: true).order(:round).each do |sentence| %>
-          <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> data-link="<%= user_url(sentence.user).html_safe %>" >
+          <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> >
             <td><%= sentence.round %></td>
             <td><%= sentence.user.display_name %></td>
             <td><%= sentence.votes.count %></td>
