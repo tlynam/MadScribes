@@ -42,30 +42,6 @@
   </div>
 </div>
 
-<% if @story.started_at && !@story.round %>
-  <h3>Leaderboard</h3>
-  <div class="sentence_container">
-    <div class="table-responsive">
-      <table class="table table-hover" style="width: 30%;">
-        <thead>
-          <tr>
-            <th>Score</th>
-            <th>Author</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @story.leaderboard.each do |score, user| %>
-            <tr class="<%= "success" if user == current_user %>">
-              <td><%= score %></td>
-              <td><%= user.display_name %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-<% end %>
-
 <h3><div id="startCountdown"><%= 'Round ' + @story.round.to_s + ' of ' + @story.rounds.to_s if @story.active? %></div></h3>
 
 <% if @story.active? %>
@@ -93,12 +69,49 @@
   <div id="countdown" style="display:none;">-1</div>
 <% end %>
 
-<h3>Story Subscribers</h3>
-<ul>
-  <% @story.subscriptions.each do |subscription| %>
-    <li><%= content_tag(:a, subscription.user.display_name, href: user_url(subscription.user)) %></li>
-  <% end %>
-</ul>
+<% if @story.started_at && !@story.round %>
+  <h3>Leaderboard</h3>
+  <div class="sentence_container">
+    <div class="table-responsive">
+      <table class="table table-hover" style="width: 30%; cursor:pointer;">
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @story.leaderboard.each do |score, user| %>
+            <tr <%= "class=success" if user == current_user %> data-link="<%= user_url(user) %>" >
+              <td><%= score %></td>
+              <td><%= user.display_name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <h3>Story Subscribers</h3>
+  <div class="sentence_container">
+    <div class="table-responsive">
+      <table class="table table-hover" style="width: 30%; cursor:pointer;">
+        <thead>
+          <tr>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @story.subscriptions.each do |subscription| %>
+            <tr <%= "class=success" if subscription.user == current_user %> data-link="<%= user_url(subscription.user) %>" >
+              <td><%= subscription.user.display_name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>  
+<% end %>
 
 <% if current_user && @story.period == :writing %>
   <%= form_for @sentence, url: story_sentences_url(@story), html: {class: "form-horizontal"} do |f| %>
