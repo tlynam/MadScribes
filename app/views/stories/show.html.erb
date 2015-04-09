@@ -29,7 +29,8 @@
         </tr>
       </thead>
       <tbody>
-        <% @story.sentences.where(winner: true).order(:round).each do |sentence| %>
+        <% current_round = @story.round || @story.rounds+1 %>
+        <% @story.sentences.where("winner = true AND round < ?", current_round).order(:round).each do |sentence| %>
           <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> data-link="<%= user_url(sentence.user).html_safe %>" >
             <td><%= sentence.round %></td>
             <td><%= sentence.user.display_name %></td>
