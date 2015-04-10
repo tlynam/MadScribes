@@ -16,4 +16,4 @@ test:
 production:
   <<: *default
   database: madscribes_production
-  pool: ENV['MAX_THREADS'] || 20
+  pool: ENV['DB_POOL'] || 20
