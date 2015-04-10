@@ -121,10 +121,14 @@ class Story < ActiveRecord::Base
     sentences.where(round: round).pluck(:votes).flatten.include?(current_user.id)
   end
 
-  def create_body
+  def winning_sentences
     scope = sentences.where(winner: true)
     scope = scope.where "round < ?", round if round
-    scope.order(:round).pluck(:body).join(" ")
+    scope
+  end
+
+  def create_body
+    winning_sentences.order(:round).pluck(:body).join(" ")
   end
 
   def leaderboard

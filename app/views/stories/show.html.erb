@@ -29,7 +29,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @story.sentences.where(winner: true).order(:round).each do |sentence| %>
+        <% @story.winning_sentences.order(:round).each do |sentence| %>
           <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> >
             <td><%= sentence.round %></td>
             <td><%= sentence.user.display_name %></td>
