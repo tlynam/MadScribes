@@ -22,15 +22,17 @@ $(function() {
   });
 })
 
-ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
-ws.onmessage = function(event) { 
-	$('.chat-window ul').append($('<li>').text(event.data))
-}
+if (location.pathname.includes('stories/')) {
+  ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
+  ws.onmessage = function(event) { 
+    $('.chat-window ul').append($('<li>').text(event.data))
+  }
 
-$(function() {
-  $('.chat-window button').click(function() {
-  	var input = $(this).siblings('input')
-  	ws.send(input.val())
-  	input.val(null)
+  $(function() {
+    $('.chat-window button').click(function() {
+      var input = $(this).siblings('input')
+      ws.send(input.val())
+      input.val(null)
+    })
   })
-})
+}
