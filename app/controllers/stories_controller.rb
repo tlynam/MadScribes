@@ -50,11 +50,12 @@ class StoriesController < ApplicationController
   def chat
     hijack do |websocket|
       websocket.onopen do
-        listen_for 'chat' do |payload|
+        listener = listen_for 'chat' do |payload|
           if payload[:story_id] == params[:id]
             websocket.send_data payload[:message]
           end
         end
+        websocket.onclose{ listener.exit }
       end
 
       websocket.onmessage do |data|
