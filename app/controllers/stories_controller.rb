@@ -47,6 +47,12 @@ class StoriesController < ApplicationController
     redirect_to story
   end
 
+  def unsubscribe
+    story = Story.find params[:id]
+    story.subscriptions.where(user: current_user).destroy_all
+    redirect_to story
+  end
+
   def chat
     hijack do |websocket|
       websocket.onopen do

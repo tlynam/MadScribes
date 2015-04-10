@@ -1,9 +1,11 @@
+<% if current_user && current_user.subscriptions.where(story: @story).none? %>
+  <%= button_to "Subscribe", subscribe_story_path, class: "btn btn-success pull-right" %>
+<% elsif current_user && current_user.subscriptions.where(story: @story).any? %>
+  <%= button_to "Unsubscribe", unsubscribe_story_path, class: "btn btn-warning pull-right" %>
+<% end %>
 <div class="page-header">
   <h1>
-    <%= @story.title %> <small>by <%= @story.user.display_name %></small>
-    <% if current_user && current_user.subscriptions.where(story: @story).none? && current_user != @story.user %>
-      <%= button_to "Subscribe", subscribe_story_path, class: "btn btn-success" %>
-    <% end %>
+    <%= @story.title %><small> by <%= @story.user.display_name %></small>
   </h1>
 </div>
 

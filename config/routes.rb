@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     member do
       post :start
       post :subscribe
+      post :unsubscribe
       get :is_active
       get :chat
     end
