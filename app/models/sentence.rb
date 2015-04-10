@@ -11,7 +11,7 @@ class Sentence < ActiveRecord::Base
 
   before_validation :derive_round, if: :new_record?
   def derive_round
-    self.round ||= story.round
+    self.round = story.round
   end
 
   def sentence_must_be_submitted_in_correct_period
