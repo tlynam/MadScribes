@@ -4,6 +4,7 @@ default: &default
 development:
   <<: *default
   database: madscribes_development
+  pool: 100
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -15,3 +16,4 @@ test:
 production:
   <<: *default
   database: madscribes_production
+  pool: ENV['MAX_THREADS'] || 20
