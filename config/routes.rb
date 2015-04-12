@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     member do
       post :start
       post :subscribe
-      post :unsubscribe
+      match :unsubscribe, via: [:get, :post]
       get :is_active
       get :chat
     end

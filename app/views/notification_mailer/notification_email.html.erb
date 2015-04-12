@@ -10,11 +10,12 @@
       It's time to rejoice and rejoin!
     </p>
     <p>
-      It's the <%= @story.period %> period in the story, visit <a href="<%= story_url(@story, host: 'madscribes.com') %>"><%= story_url(@story, host: 'madscribes.com') %></a>
+      It's the <%= @story.period %> period in the story, visit <a href="<%= story_url(@story) %>"><%= story_url(@story) %></a>
     </p>
     <p>
       Period ends <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
     </p>
     <p>Thanks and have a great day!</p>
+    <p><%= link_to 'Unsubscribe', unsubscribe_story_url(@story, token: @subscription.unsubscribe_token) %></p>
   </body>
 </html>

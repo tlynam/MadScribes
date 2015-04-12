@@ -49,7 +49,16 @@ class StoriesController < ApplicationController
 
   def unsubscribe
     story = Story.find params[:id]
-    story.subscriptions.where(user: current_user).destroy_all
+
+    scope = story.subscriptions
+    if request.post? #When clicking button on story
+      scope = scope.where user: current_user
+    else #When clicking unsubscribe from email
+      scope = scope.where unsubscribe_token: params[:token]
+    end
+    scope.destroy_all
+
+    flash[:notice] = 'You have successfully unsubscribed.'
     redirect_to story
   end
 

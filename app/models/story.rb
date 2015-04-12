@@ -90,7 +90,6 @@ class Story < ActiveRecord::Base
       round_duration = writing_period + voting_period
       rounds.times.flat_map do |round|
         beginning = started_at + (round_duration * round)
-
         [
           [beginning                   ..(beginning + writing_period), [round+1, :writing]],
           [(beginning + writing_period)..(beginning + round_duration), [round+1, :voting]]
