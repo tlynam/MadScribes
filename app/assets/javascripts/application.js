@@ -22,13 +22,23 @@ $(function() {
   });
 })
 
-if (location.pathname.includes('stories/')) {
-  ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
+if (location.pathname.match('stories/')) {
+  var ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
   ws.onmessage = function(event) { 
+    var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
+    messages.push(event.data)
+    sessionStorage.setItem(location.pathname, JSON.stringify(messages))
+
     $('.chat-window ul').append($('<li>').text(event.data))
   }
 
   $(function() {
+    var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
+    messages.forEach(function(message) {
+      $('.chat-window ul').append($('<li>').text(message))
+    })
+
+
     $('.chat-window button').click(function() {
       var input = $(this).siblings('input')
       ws.send(input.val())

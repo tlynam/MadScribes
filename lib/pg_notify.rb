@@ -4,12 +4,16 @@ module PGNotify
       ActiveRecord::Base.connection_pool.with_connection do |connection|
         conn = connection.instance_variable_get(:@connection)
         conn.async_exec "listen #{channel}"
-        loop do
-          conn.wait_for_notify do |notified_channel, pid, payload|
-            if channel == notified_channel
-              yield JSON.parse(payload, symbolize_names: true)
+        begin
+          loop do
+            conn.wait_for_notify do |notified_channel, pid, payload|
+              if channel == notified_channel
+                yield JSON.parse(payload, symbolize_names: true)
+              end
             end
           end
+        ensure
+          conn.async_exec "unlisten #{channel}"
         end
       end
     end
