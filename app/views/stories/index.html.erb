@@ -12,8 +12,8 @@
   <%= link_to "Create Story", new_story_path, class: "btn btn-success", style: "margin-top: 15px;" %>
 </div>
 
-<div class="col-sm-7">
-  <h3>New Stories</h3>
+<div class="col-sm-12">
+  <h3>New Stories Waiting to Start</h3>
   <% if @pending_stories.none? %>
     <h4>There are currently no new stories waiting to start, hmm</h4>
     <h4>How about creating a new story and sharing the url?</h4>
@@ -47,7 +47,7 @@
 </div>
 
 <div class="col-sm-7">
-  <h3>Live Stories</h3>
+  <h3>Live Stories that are Active</h3>
   <% if @live_stories.none? %>
     <h4>There are currently no live stories, hmm</h4>
     <h4>How about creating a new story and sharing the url?</h4>
