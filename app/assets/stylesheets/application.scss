@@ -30,3 +30,10 @@ $colors: ("red": Tomato, "green": LimeGreen, "blue": CornflowerBlue);
 a[class|="header"] {
   text-decoration: none;
 }
+
+.chat-window {
+	ul {
+		overflow: auto;
+		max-height: 300px;
+	}
+}

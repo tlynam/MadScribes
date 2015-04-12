@@ -74,6 +74,8 @@ class StoriesController < ApplicationController
       end
 
       websocket.onmessage do |data|
+        user = current_user ? current_user.display_name : "Anonymous"
+        data = user + ": " + data
         notify 'chat', story_id: params[:id], message: data
       end
     end

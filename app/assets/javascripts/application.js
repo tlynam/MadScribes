@@ -29,13 +29,17 @@ if (location.pathname.match('stories/')) {
     messages.push(event.data)
     sessionStorage.setItem(location.pathname, JSON.stringify(messages))
 
-    $('.chat-window ul').append($('<li>').text(event.data))
+    var chatWindow = $('.chat-window ul')
+    chatWindow.append($('<li>').text(event.data))
+    chatWindow.scrollTop(chatWindow[0].scrollHeight)
   }
 
   $(function() {
     var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
     messages.forEach(function(message) {
-      $('.chat-window ul').append($('<li>').text(message))
+      var chatWindow = $('.chat-window ul')
+      chatWindow.append($('<li>').text(message))
+      chatWindow.scrollTop(chatWindow[0].scrollHeight)
     })
 
 
@@ -44,5 +48,14 @@ if (location.pathname.match('stories/')) {
       ws.send(input.val())
       input.val(null)
     })
+
+    $('.chat-window input').keypress(function (e) {
+     var key = e.which;
+     if(key == 13)  // the enter key code
+      {
+        $('.chat-window button').click();
+        return false;  
+      }
+    });   
   })
 }
