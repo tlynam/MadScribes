@@ -3,7 +3,6 @@ ruby "2.2.0"
 
 gem 'rails', '~> 4.2.0'
 gem 'puma'
-gem 'rack-timeout'
 gem 'pg'
 gem 'bootstrap-sass'
 gem 'tubesock'
@@ -20,7 +19,10 @@ gem 'turbolinks'
 gem 'devise'
 gem 'rollbar'
 
-gem 'rails_12factor', group: :production
+group :production do
+	gem 'rack-timeout'
+	gem 'rails_12factor'
+end
 
 group :development, :test do
   gem 'pry-rails'
