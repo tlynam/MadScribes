@@ -42,7 +42,6 @@ if (location.pathname.match('stories/')) {
       chatWindow.scrollTop(chatWindow[0].scrollHeight)
     })
 
-
     $('.chat-window button').click(function() {
       var input = $(this).siblings('input')
       ws.send(input.val())
@@ -56,6 +55,6 @@ if (location.pathname.match('stories/')) {
         $('.chat-window button').click();
         return false;  
       }
-    });   
+    })   
   })
 }
