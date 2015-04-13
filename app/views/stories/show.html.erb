@@ -3,201 +3,204 @@
 <% elsif current_user && current_user.subscriptions.where(story: @story).any? %>
   <%= button_to "Unsubscribe", unsubscribe_story_path, class: "btn btn-warning pull-right" %>
 <% end %>
+
 <div class="page-header">
   <h1>
     <%= @story.title %><small> by <%= @story.user.display_name %></small>
   </h1>
-</div>
+  <% if !@story.started_at && @story.user == current_user %>
+    <%= button_to "Ready Player One?", start_story_path, class: "btn btn-success btn-lg" %>
+  <% end %>
 
-<% if !@story.started_at && @story.user == current_user %>
-  <h3><%= button_to "Ready Player One?", start_story_path, class: "btn btn-success" %></h3>
-<% end %>
+  <% if @story.started_at && !@story.round %>
+    <h2 style="color: red; text-align: center;">Game Over</h2>
+  <% end %>
 
-<% if @story.started_at && !@story.round %>
-  <h3>Game Over</h3>
-<% end %>
-
-<p><%= @story.body || @story.create_body %></p>
-
-<div class="sentence_container">
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Round</th>
-          <th>Author</th>
-          <th>Votes</th>
-          <th>Sentence</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @story.winning_sentences.order(:round).each do |sentence| %>
-          <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> >
-            <td><%= sentence.round %></td>
-            <td><%= sentence.user.display_name %></td>
-            <td><%= sentence.votes.count %></td>
-            <td><%= sentence.body %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+  <div <%= 'class="well"'.html_safe if @story.started_at && @story.round != 1 %> >
+    <h4>
+      <%= @story.body || @story.create_body %>
+    </h4>
   </div>
 </div>
 
-<h3><div id="startCountdown"><%= 'Round ' + @story.round.to_s + ' of ' + @story.rounds.to_s if @story.active? %></div></h3>
-
 <% if @story.active? %>
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= @story.percent_story_left %>%;">
-      <% if @story.round == 1 %>
-        First Round
-      <% elsif @story.percent_story_left > 15 && @story.percent_story_left < 100 %>
-        Story Completed <%= @story.percent_story_left %>%
-      <% elsif @story.percent_story_left == 100 %>
-        Last Round    
+  <div class="well progress_well">
+    <h3 style="text-align: center;">
+      <%= 'Round ' + @story.round.to_s + ' of ' + @story.rounds.to_s %>
+      -
+      Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span>
+      <% if @story.long_running? %>
+        -
+        <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
       <% end %>
+    </h3>
+    <% if !@story.started_at %>
+      <div id="countdown" style="display:none;">-1</div>
+    <% end %>
+
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= @story.percent_story_left %>%;">
+        <% if @story.round == 1 %>
+          First Round
+        <% elsif @story.percent_story_left > 15 && @story.percent_story_left < 100 %>
+          Story Completed <%= @story.percent_story_left %>%
+        <% elsif @story.percent_story_left == 100 %>
+          Last Round    
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>
 
-<% if @story.active? %>
-  <h3>
-    Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span>
-    <% if @story.long_running? %>
-      <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
-    <% end %>
-  </h3>
-<% elsif !@story.started_at %>
-  <div id="countdown" style="display:none;">-1</div>
-<% end %>
+<div class="col-sm-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Winning Sentences</h3>
+    </div>
+    <div class="panel-body">
+      <div class="sentence_container">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Author</th>
+                <th>Votes</th>
+                <th>Sentence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @story.winning_sentences.order(:round).each do |sentence| %>
+                <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> >
+                  <td><%= sentence.round %></td>
+                  <td><%= sentence.user.display_name %></td>
+                  <td><%= sentence.votes.count %></td>
+                  <td><%= sentence.body %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
 
 <% if @story.started_at && !@story.round %>
-  <h3>Leaderboard</h3>
-  <div class="sentence_container">
-    <div class="table-responsive">
-      <table class="table table-hover" style="width: 30%; cursor:pointer;">
-        <thead>
-          <tr>
-            <th>Score</th>
-            <th>Author</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @story.leaderboard.each do |score, user| %>
-            <tr <%= "class=success" if user == current_user %> data-link="<%= user_url(user) %>" >
-              <td><%= score %></td>
-              <td><%= user.display_name %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Leaderboard</h3>
+      </div>
+      <div class="panel-body">
+        <div class="sentence_container">
+          <div class="table-responsive">
+            <table class="table table-hover" style="cursor:pointer;">
+              <thead>
+                <tr>
+                  <th>Score</th>
+                  <th>Author</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @story.leaderboard.each do |score, user| %>
+                  <tr <%= "class=success" if user == current_user %> data-link="<%= user_url(user) %>" >
+                    <td><%= score %></td>
+                    <td><%= user.display_name %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-<% else %>
-  <h3>Story Subscribers</h3>
-  <div class="sentence_container">
-    <div class="table-responsive">
-      <table class="table table-hover" style="width: 30%; cursor:pointer;">
-        <thead>
-          <tr>
-            <th>Author</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @story.subscriptions.each do |subscription| %>
-            <tr <%= "class=success" if subscription.user == current_user %> data-link="<%= user_url(subscription.user) %>" >
-              <td><%= subscription.user.display_name %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>  
 <% end %>
 
 <% if current_user && @story.period == :writing %>
-  <%= form_for @sentence, url: story_sentences_url(@story), html: {class: "form-horizontal"} do |f| %>
-    <h3>Submit a Sentence</h3>
-    <div class="field form-group">
-      <%= f.label :body, class: "col-sm-1 control-label" %>
-      <div class="col-sm-11">
-        <%= f.text_field :body, class: "form-control", :autofocus => true, disabled: @story.sentence_submitted?(current_user) %>
+<div class="col-sm-12">
+  <div class="well action_well">
+    <%= form_for @sentence, url: story_sentences_url(@story), html: {class: "form-horizontal"} do |f| %>
+      <h3>Submit a Sentence</h3>
+      <div class="field form-group">
+        <%= f.label :body, class: "col-sm-1 control-label" %>
+        <div class="col-sm-11">
+          <%= f.text_field :body, class: "form-control", :autofocus => true, disabled: @story.sentence_submitted?(current_user) %>
+        </div>
       </div>
-    </div>
-    <div class="actions form-group">
-      <div class="col-sm-offset-1 col-sm-11">
-        <% button_text = @story.sentence_submitted?(current_user) ? "Submitted" : "Submit" %>
-        <%= f.submit button_text, class: "btn btn-success", disabled: @story.sentence_submitted?(current_user) %>
+      <div class="actions form-group">
+        <div class="col-sm-offset-1 col-sm-11">
+          <% button_text = @story.sentence_submitted?(current_user) ? "Submitted" : "Submit" %>
+          <%= f.submit button_text, class: "btn btn-success", disabled: @story.sentence_submitted?(current_user) %>
+        </div>
       </div>
+    <% end %>
     </div>
-  <% end %>
+  </div>
 <% end %>
 
 <% if current_user && @story.period == :voting %>
-  <h3>Vote Now</h3>
-  <div class="sentence_container">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Round</th>
-            <th>Sentence</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @story.sentences.where(round: @story.round).order(created_at: :desc).each do |sentence| %>
-            <tr>
-              <td><%= sentence.round %></td>
-              <td><%= sentence.body %></td>
-              <% button_text = @story.vote_submitted?(current_user) ? "Voted" : "Vote" %>
-              <td><%= button_to button_text, vote_story_sentence_path(@story,sentence), method: :post, disabled: @story.vote_submitted?(current_user), class: "btn btn-primary" %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+  <div class="col-sm-12">
+    <div class="well action_well">
+      <h3>Vote Now</h3>
+      <div class="sentence_container">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Sentence</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @story.sentences.where(round: @story.round).order(created_at: :desc).each do |sentence| %>
+                <tr>
+                  <td><%= sentence.round %></td>
+                  <td><%= sentence.body %></td>
+                  <% button_text = @story.vote_submitted?(current_user) ? "Voted" : "Vote" %>
+                  <td><%= button_to button_text, vote_story_sentence_path(@story,sentence), method: :post, disabled: @story.vote_submitted?(current_user), class: "btn btn-primary" %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 <% end %>
 
-<div class="panel panel-default" style="width: 80%;">
-  <div class="panel-heading">
-    <h3 class="panel-title">Chat</h3>
-  </div>
-  <div class="panel-body">
-    <div class="chat-window">
-      <ul style="list-style: none; margin: 0; padding: 0;">
-      </ul>
-      <hr>
-      <div class="form-inline">
-        <input class="form-control" style="width: 80%; margin-right: 10px;" placeholder="Send a message:">
-        <button class="btn btn-default">Submit</button>
+<div class="col-sm-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Chat</h3>
+    </div>
+    <div class="panel-body chat_well">
+      <div class="col-sm-3">
+        <div class="table-responsive">
+          <table class="table table-hover" style="cursor:pointer;">
+            <tbody>
+              <% @story.subscriptions.each do |subscription| %>
+                <tr <%= "class=success" if subscription.user == current_user %> data-link="<%= user_url(subscription.user) %>" >
+                  <td><%= subscription.user.display_name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-9">
+        <div class="chat-window">
+          <ul style="list-style: none; margin: 0; padding: 0;">
+          </ul>
+          <hr>
+          <div class="form-inline">
+            <input class="form-control" style="width: 80%; margin-right: 10px;" placeholder="Send a message:">
+            <button class="btn btn-primary">Submit</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-  var seconds, element;
-  function countdown() {
-    element = $('#countdown');
-    if (element.length)
-      seconds = parseInt(element.text(), 10)
-      return;
-
-    if (seconds == 0) {
-      window.location.reload();
-      return;
-    } else if (seconds < 0 && seconds % 4 == 0) {
-      $.get(location.pathname + '/is_active', function(data) {
-        if(data == true)
-          window.location.reload();
-      });
-    }
- 
-    seconds--;
-    element.text(seconds);
-    setTimeout(countdown, 1000);
-  } 
-  setTimeout(countdown, 1000);
-</script>

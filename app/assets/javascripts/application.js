@@ -23,6 +23,30 @@ $(function() {
 })
 
 if (location.pathname.match('stories/')) {
+  //Round countdown and page reload for players waiting for game to start
+  var seconds, element;
+  function countdown() {
+    element = $('#countdown');
+    if (element.length)
+      seconds = parseInt(element.text(), 10)
+
+    if (seconds == 0) {
+      window.location.reload();
+      return;
+    } else if (seconds < 0 && seconds % 4 == 0) {
+      $.get(location.pathname + '/is_active', function(data) {
+        if(data == true)
+          window.location.reload();
+      });
+    }
+ 
+    seconds--;
+    element.text(seconds);
+    setTimeout(countdown, 1000);
+  } 
+  setTimeout(countdown, 1000);
+
+  //Websocket chat
   var ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
   ws.onmessage = function(event) { 
     var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
@@ -42,18 +66,21 @@ if (location.pathname.match('stories/')) {
       chatWindow.scrollTop(chatWindow[0].scrollHeight)
     })
 
+    //Submit chat via click
     $('.chat-window button').click(function() {
       var input = $(this).siblings('input')
-      ws.send(input.val())
-      input.val(null)
+        if(input.val()) {
+          ws.send(input.val())
+          input.val(null)
+        }
     })
 
+    //Submit chat via press enter
     $('.chat-window input').keypress(function (e) {
      var key = e.which;
      if(key == 13)  // the enter key code
       {
         $('.chat-window button').click();
-        return false;  
       }
     })   
   })

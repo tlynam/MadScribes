@@ -1,23 +1,25 @@
-<div class="home_header">
+<div class="well home_header">
   <h1>Create stories with friends in real time</h1>
+  <%= image_tag("header.jpg") %>
 
-  <%= image_tag("header.jpg") %> </br>
+  <h4 style="margin-left: 30%; padding-top: 10px; text-align: left;">
+    The game is simple, yet really fun! 
+    <ol>
+      <li>Each round you submit a sentence</li>
+      <li>Everyone votes on the sentence they like the best</li>
+      <li>The winning sentence is added to the story</li>
+      <li>You recieve a point for each vote</li>
+    </ol>
+  </h4>
 
-  <div class="col-sm-12">
-    <h4>
-      The game is simple, yet really fun! Each round you submit a sentence. Then everyone votes on the sentence they like the best and the winning sentence is added to the story. You recieve a point for each vote.
-    </h4>
-  </div>
+  <%= link_to "Create Story", new_story_path, class: "btn btn-success btn-lg", style: "margin-top: 15px; margin-bottom: 15px;" %>
 
-  <div class="col-sm-12">
-    <%= link_to "Create Story", new_story_path, class: "btn btn-success", style: "margin-top: 15px; margin-bottom: 15px;" %>
-  </div>
 </div>
 
 <div class="col-sm-12">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Waiting to Start</h3>
+      <h3 class="panel-title">New Stories</h3>
     </div>
     <div class="panel-body">
       <% if @pending_stories.none? %>
@@ -28,7 +30,7 @@
           <thead>
             <tr>
               <th>Story</th>
-              <th>Subscribers (count)</th>
+              <th>Subscribers <span class="badge">count</span></th>
             </tr>
           </thead>
           <tbody>
@@ -36,7 +38,7 @@
               <tr <%= "class=success" if story.user == current_user %> data-link="<%= story_url(story) %>" >
                 <td><%= story.title %></td>
                 <td>
-                  (<%= story.subscriptions.count %>)
+                  <span class="badge"><%= story.subscriptions.count %></span>
                   <%= story.subscriptions.map{|subscription| subscription.user.display_name}.to_sentence %>
                 </td>
               </tr>
@@ -52,7 +54,7 @@
 <div class="col-sm-12">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Active Stories</h3>
+      <h3 class="panel-title">Live Stories</h3>
     </div>
     <div class="panel-body">
       <% if @live_stories.none? %>

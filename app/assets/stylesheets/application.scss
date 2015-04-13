@@ -19,9 +19,9 @@ form .field_with_errors {
   display: inline;
 }
 
-$colors: ("red": Tomato, "green": LimeGreen, "blue": CornflowerBlue);
+$logo_colors: ("red": Tomato, "green": LimeGreen, "blue": CornflowerBlue);
 
-@each $color_name, $color in $colors {
+@each $color_name, $color in $logo_colors {
   a.header-#{$color_name} {
     color: $color;
   }
@@ -40,4 +40,16 @@ a[class|="header"] {
 
 .home_header {
 	text-align: center;
+}
+
+.progress_well {
+	background-color: AntiqueWhite;
+}
+
+.action_well {
+	background-color: AliceBlue;
+}
+
+.chat_well {
+	background-color: Snow;
 }
