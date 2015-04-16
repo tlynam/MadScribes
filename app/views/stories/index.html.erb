@@ -16,60 +16,58 @@
 
 </div>
 
-<div class="col-sm-12">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">New Stories</h3>
-    </div>
-    <div class="panel-body">
-      <% if @pending_stories.none? %>
-        <h4>You can start a story :)</h4>
-      <% end %>
-      <div class="table-responsive">
-        <table class="table table-hover" style="cursor:pointer;">
-          <thead>
-            <tr>
-              <th>Story</th>
-              <th>Subscribers <span class="badge">count</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @pending_stories.each do |story| %>
-              <tr <%= "class=success" if story.user == current_user %> data-link="<%= story_url(story) %>" >
-                <td><%= story.title %></td>
-                <td>
-                  <span class="badge"><%= story.subscriptions.count %></span>
-                  <%= story.subscriptions.map{|subscription| subscription.user.display_name}.to_sentence %>
-                </td>
+<% if @pending_stories.any? %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">New Stories</h3>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-hover" style="cursor:pointer;">
+            <thead>
+              <tr>
+                <th>Story</th>
+                <th>Subscribers <span class="badge">count</span></th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @pending_stories.each do |story| %>
+                <tr <%= "class=success" if story.user == current_user %> data-link="<%= story_url(story) %>" >
+                  <td><%= story.title %></td>
+                  <td>
+                    <span class="badge"><%= story.subscriptions.count %></span>
+                    <%= story.subscriptions.map{|subscription| subscription.user.display_name}.to_sentence %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <%= will_paginate @pending_stories, renderer: BootstrapPagination::Rails %>
+    </div>
+  </div>
+<% end %>
+
+<% if @live_stories.any? %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Live Stories</h3>
+      </div>
+      <div class="panel-body">
+        <ul style="margin-top:20px;">
+          <% @live_stories.each do |story| %>
+            <li><%= link_to story.title, story %></li>
+          <% end %>
+        </ul>
+
+        <%= will_paginate @live_stories, renderer: BootstrapPagination::Rails %>
       </div>
     </div>
-    <%= will_paginate @pending_stories, renderer: BootstrapPagination::Rails %>
   </div>
-</div>
-
-<div class="col-sm-12">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Live Stories</h3>
-    </div>
-    <div class="panel-body">
-      <% if @live_stories.none? %>
-        <h4>You can start a story :)</h4>
-      <% end %>
-      <ul style="margin-top:20px;">
-        <% @live_stories.each do |story| %>
-          <li><%= link_to story.title, story %></li>
-        <% end %>
-      </ul>
-
-      <%= will_paginate @live_stories, renderer: BootstrapPagination::Rails %>
-    </div>
-  </div>
-</div>
+<% end %>
 
 <div class="col-sm-12">
   <div class="panel panel-default">
