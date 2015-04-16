@@ -29,7 +29,7 @@
               <tr>
                 <th>Story</th>
                 <th>Rounds</th>
-                <th>Subscribers <span class="badge">count</span></th>
+                <th><span class="badge">Subscribers</span> / Names</th>
               </tr>
             </thead>
             <tbody>
@@ -64,7 +64,7 @@
             <thead>
               <th>Title</th>
               <th>Round</th>
-              <th>Subscribers <span class="badge">count</span></th>
+              <th><span class="badge">Subscribers</span> / Names</th>
             </thead>
             <% @live_stories.each do |story| %>
               <tr <%= "class=success" if story.user == current_user %> data-link="<%= story_url(story) %>" >
@@ -107,7 +107,7 @@
               <tr>
                 <th>Story</th>
                 <th>Rounds</th>
-                <th>Subscribers <span class="badge">count</span></th>
+<th><span class="badge">Subscribers</span> / Names</th>
               </tr>
             </thead>
             <tbody>
@@ -143,6 +143,7 @@
               <tr>
                 <th>Score</th>
                 <th>Author</th>
+                <th>Top Sentence</th>
               </tr>
             </thead>
             <tbody>
@@ -150,6 +151,7 @@
                 <tr <%= "class=success" if user == current_user %> data-link="<%= user_url(user) %>" >
                   <td><%= user.score %></td>
                   <td><%= user.display_name %></td>
+                  <td><%= user.sentences.where(winner: true).order("array_length(votes, 1) DESC").first.try(:body) %></td>
                 </tr>
               <% end %>
             </tbody>
