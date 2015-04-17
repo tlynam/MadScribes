@@ -2,7 +2,7 @@ require 'pg_notify'
 
 class StoriesController < ApplicationController
   include Tubesock::Hijack
-  include PGNotify
+  @@notifier = PGNotify.new('chat')
 
   def index
     @stories = Story.search(params[:q]).paginate(page: params[:page], per_page:  10).order('created_at DESC')
@@ -65,18 +65,16 @@ class StoriesController < ApplicationController
   def chat
     hijack do |websocket|
       websocket.onopen do
-        listener = listen_for 'chat' do |payload|
-          if payload[:story_id] == params[:id]
+        @@notifier.listen do |payload|
+          if payload[:id] == params[:id]
             websocket.send_data payload[:message]
           end
         end
-        websocket.onclose{ listener.exit }
       end
 
-      websocket.onmessage do |data|
+      websocket.onmessage do |message|
         user = current_user ? current_user.display_name : "Anonymous"
-        data = user + ": " + data
-        notify 'chat', story_id: params[:id], message: data
+        @@notifier.notify id: params[:id], message: "#{user}: #{message}"
       end
     end
   end
