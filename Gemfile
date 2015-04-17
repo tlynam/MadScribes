@@ -14,7 +14,6 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'will_paginate-bootstrap'
 
 gem 'jquery-rails'
-gem 'turbolinks'
 
 gem 'devise'
 gem 'rollbar'
