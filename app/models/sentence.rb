@@ -25,7 +25,7 @@ class Sentence < ActiveRecord::Base
   end
 
   def clean
-    self.body.strip
+    self.body.strip!
     self.body << '.' unless %w[. ? !].include? body.last
   end
 
