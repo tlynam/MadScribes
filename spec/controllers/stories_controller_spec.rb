@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe StoriesController do
   let(:user) { User.create! email: 'a@b.c', password: '123sdfh!', password_confirmation: '123sdfh!' }
+  let(:user2) { User.create! email: 'bb@dd.ee', password: '123sdfh!', password_confirmation: '123sdfh!' }
   let(:story1) { Story.create! user: user, title: 'Title 1', started_at: 1.day.ago }
   let(:story2) { Story.create! user: user, title: 'Title 2', started_at: 1.day.ago }
   let(:story3) { Story.create! user: user, title: 'Title 3', started_at: 1.day.ago }
@@ -30,7 +31,55 @@ describe StoriesController do
     Story.populate_body
   end
 
-  describe 'search' do
+  describe '#start' do
+    it 'starts the story' do
+      test_story = Story.create! user: user, title: 'A title'
+
+      post :start, id: test_story.id
+      expect(test_story.reload.started_at).to be_a Time
+    end
+  end
+
+  describe '#active?' do
+    it 'should be active' do
+      test_story = Story.create! user: user, title: 'A title', started_at: 1.minute.ago
+      expect(test_story.active?).to eq true
+    end
+
+    it 'shouldnt be active' do
+      test_story = Story.create! user: user, title: 'A title'
+      expect(test_story.active?).to eq false
+    end
+  end
+
+  describe '#subscribe' do
+    it 'should subscribe a user' do
+      sign_in user2
+
+      expect {
+        post :subscribe, id: story2.id
+      }.to change{story2.subscriptions.count}.by(1)
+    end
+  end
+
+  describe '#unsubscribe' do
+    it 'should unsubscribe a user' do
+      sign_in user
+
+      expect {
+        post :unsubscribe, id: story2.id
+      }.to change{story2.subscriptions.count}.by(-1)
+    end
+    it 'shouldnt unsubscribe a user' do
+      sign_in user2
+
+      expect {
+        post :unsubscribe, id: story2.id
+      }.to change{story2.subscriptions.count}.by(0)
+    end
+  end
+
+  describe '#search' do
     it 'shows all records when no search has been applied' do
       get :index
       expect(assigns(:stories).count).to eq 3
