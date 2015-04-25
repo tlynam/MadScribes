@@ -169,7 +169,7 @@ GEM
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
     slop (3.6.0)
-    spring (1.3.2)
+    spring (1.3.4)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -219,7 +219,7 @@ DEPENDENCIES
   rollbar
   rspec-rails
   sass-rails (~> 5.0)
-  spring
+  spring (~> 1.3.4)
   tubesock
   uglifier (>= 1.3.0)
   will_paginate-bootstrap

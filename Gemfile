@@ -30,7 +30,7 @@ group :development, :test do
   gem "better_errors"
   gem "letter_opener"
 
-  gem 'spring'
+  gem 'spring', '~> 1.3.4'
 
   gem 'rspec-rails'
   gem 'database_cleaner'
