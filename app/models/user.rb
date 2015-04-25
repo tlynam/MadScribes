@@ -10,13 +10,13 @@ class User < ActiveRecord::Base
 
   validates_length_of :username, maximum: 20
   validates :email, uniqueness: true
-  validates :username, uniqueness: true
+  validates :username, uniqueness: true, if: :username?
 
   def score
     sentences.sum 'array_length(votes, 1)'
   end
 
-  def display_name 
+  def display_name
     username.presence || email
   end
 end

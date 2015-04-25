@@ -33,21 +33,22 @@ if (location.pathname.match('stories/')) {
       window.location.reload();
       return;
     } else if (seconds < 0 && seconds % 4 == 0) {
+      //Countdown from -1 for subscribers waiting to start game
       $.get(location.pathname + '/is_active', function(data) {
         if(data == true)
           window.location.reload();
       });
     }
- 
+
     seconds--;
     element.text(seconds);
     setTimeout(countdown, 1000);
-  } 
+  }
   setTimeout(countdown, 1000);
 
   //Websocket chat
   var ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
-  ws.onmessage = function(event) { 
+  ws.onmessage = function(event) {
     var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
     messages.push(event.data)
     sessionStorage.setItem(location.pathname, JSON.stringify(messages))
@@ -81,6 +82,6 @@ if (location.pathname.match('stories/')) {
       {
         $('.chat-window button').click();
       }
-    })   
+    })
   })
 }
