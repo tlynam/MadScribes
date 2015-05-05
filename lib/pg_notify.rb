@@ -2,13 +2,17 @@ class PGNotify
 
   def initialize(channel)
     @channel = channel
-    @clients = []
+    @subscribers = {}
     @mutex = Mutex.new
   end
 
-  def listen(&block)
-    @clients << block
+  def subscribe(object, &block)
+    @subscribers[object] = block
     setup_listener
+  end
+
+  def unsubscribe(object)
+    @subscribers.delete object
   end
 
   def setup_listener
@@ -23,7 +27,7 @@ class PGNotify
               loop do
                 pg_conn.wait_for_notify do |channel, pid, payload|
                   json = JSON.parse payload, symbolize_names: true
-                  @clients.each{ |c| c.call json }
+                  @subscribers.each{ |_, block| block.call json }
                 end
               end
             ensure
