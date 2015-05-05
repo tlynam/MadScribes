@@ -23,6 +23,11 @@
   </div>
 </div>
 
+
+<% unless @story.started_at %>
+  <div id="countdown" style="display:none;">-1</div>
+<% end %>
+
 <% if @story.active? %>
   <div class="well progress_well">
     <h3 style="text-align: center;">
@@ -34,10 +39,6 @@
         <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
       <% end %>
     </h3>
-    <% if !@story.started_at %>
-      <div id="countdown" style="display:none;">-1</div>
-    <% end %>
-
     <div class="progress">
       <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= @story.percent_story_left %>%;">
         <% if @story.round == 1 %>
@@ -45,7 +46,7 @@
         <% elsif @story.percent_story_left > 15 && @story.percent_story_left < 100 %>
           Story Completed <%= @story.percent_story_left %>%
         <% elsif @story.percent_story_left == 100 %>
-          Last Round    
+          Last Round
         <% end %>
       </div>
     </div>
@@ -84,7 +85,7 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
 
 <% if @story.started_at && !@story.round %>
   <div class="col-sm-12">
