@@ -1,21 +1,22 @@
 source 'https://rubygems.org'
-ruby "2.2.0"
+ruby "2.6.5"
 
-gem 'rails', '~> 4.2.0'
+gem 'mini_racer'
+gem 'bigdecimal', '~> 1.4'
+gem 'rails', '~> 4.2'
 gem 'puma'
-gem 'pg'
+gem 'pg', '~> 0.21'
 gem 'bootstrap-sass'
-gem 'tubesock'
+gem 'tubesock', '~> 0.2'
 
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.1.0'
 
 gem 'will_paginate-bootstrap'
 
 gem 'jquery-rails'
 
-gem 'devise'
+gem 'devise', '~> 4.4'
 gem 'rollbar'
 
 group :production do
@@ -30,7 +31,7 @@ group :development, :test do
   gem "better_errors"
   gem "letter_opener"
 
-  gem 'spring', '~> 1.3.4'
+  gem 'bootsnap'
 
   gem 'rspec-rails'
   gem 'database_cleaner'
