@@ -47,41 +47,41 @@ if (location.pathname.match('stories/')) {
   setTimeout(countdown, 1000);
 
   //Websocket chat
-  var ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
-  ws.onmessage = function(event) {
-    var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
-    messages.push(event.data)
-    sessionStorage.setItem(location.pathname, JSON.stringify(messages))
+  // var ws = new WebSocket('ws://' + location.host + location.pathname + '/chat')
+  // ws.onmessage = function(event) {
+  //   var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
+  //   messages.push(event.data)
+  //   sessionStorage.setItem(location.pathname, JSON.stringify(messages))
 
-    var chatWindow = $('.chat-window ul')
-    chatWindow.append($('<li>').text(event.data))
-    chatWindow.scrollTop(chatWindow[0].scrollHeight)
-  }
+  //   var chatWindow = $('.chat-window ul')
+  //   chatWindow.append($('<li>').text(event.data))
+  //   chatWindow.scrollTop(chatWindow[0].scrollHeight)
+  // }
 
-  $(function() {
-    var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
-    messages.forEach(function(message) {
-      var chatWindow = $('.chat-window ul')
-      chatWindow.append($('<li>').text(message))
-      chatWindow.scrollTop(chatWindow[0].scrollHeight)
-    })
+  // $(function() {
+  //   var messages = JSON.parse(sessionStorage.getItem(location.pathname) || "[]")
+  //   messages.forEach(function(message) {
+  //     var chatWindow = $('.chat-window ul')
+  //     chatWindow.append($('<li>').text(message))
+  //     chatWindow.scrollTop(chatWindow[0].scrollHeight)
+  //   })
 
-    //Submit chat via click
-    $('.chat-window button').click(function() {
-      var input = $(this).siblings('input')
-        if(input.val()) {
-          ws.send(input.val())
-          input.val(null)
-        }
-    })
+  //   //Submit chat via click
+  //   $('.chat-window button').click(function() {
+  //     var input = $(this).siblings('input')
+  //       if(input.val()) {
+  //         ws.send(input.val())
+  //         input.val(null)
+  //       }
+  //   })
 
-    //Submit chat via press enter
-    $('.chat-window input').keypress(function (e) {
-     var key = e.which;
-     if(key == 13)  // the enter key code
-      {
-        $('.chat-window button').click();
-      }
-    })
-  })
+  //   //Submit chat via press enter
+  //   $('.chat-window input').keypress(function (e) {
+  //    var key = e.which;
+  //    if(key == 13)  // the enter key code
+  //     {
+  //       $('.chat-window button').click();
+  //     }
+  //   })
+  // })
 }

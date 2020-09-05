@@ -216,36 +216,38 @@
   </div>
 <% end %>
 
-<div class="col-sm-12">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Chat</h3>
-    </div>
-    <div class="panel-body chat_well">
-      <div class="col-sm-3">
-        <div class="table-responsive">
-          <table class="table table-hover" style="cursor:pointer;">
-            <tbody>
-              <% @story.subscriptions.each do |subscription| %>
-                <tr <%= "class=success" if subscription.user == current_user %> data-link="<%= user_url(subscription.user) %>" >
-                  <td><%= subscription.user.display_name %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+<% if false %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Chat</h3>
       </div>
-      <div class="col-sm-9">
-        <div class="chat-window">
-          <ul style="list-style: none; margin: 0; padding: 0;">
-          </ul>
-          <hr>
-          <div class="form-inline">
-            <input class="form-control" style="width: 80%; margin-right: 10px;" placeholder="Send a message:">
-            <button class="btn btn-primary">Submit</button>
+      <div class="panel-body chat_well">
+        <div class="col-sm-3">
+          <div class="table-responsive">
+            <table class="table table-hover" style="cursor:pointer;">
+              <tbody>
+                <% @story.subscriptions.each do |subscription| %>
+                  <tr <%= "class=success" if subscription.user == current_user %> data-link="<%= user_url(subscription.user) %>" >
+                    <td><%= subscription.user.display_name %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-sm-9">
+          <div class="chat-window">
+            <ul style="list-style: none; margin: 0; padding: 0;">
+            </ul>
+            <hr>
+            <div class="form-inline">
+              <input class="form-control" style="width: 80%; margin-right: 10px;" placeholder="Send a message:">
+              <button class="btn btn-primary">Submit</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>
