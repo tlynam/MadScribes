@@ -62,7 +62,7 @@ class Story < ActiveRecord::Base
       story.update_attributes! body: story.create_body
     end
   end
-  
+
   def round
     if started_at && range = find_time_range
       range[1][0]
@@ -77,6 +77,10 @@ class Story < ActiveRecord::Base
 
   def active?
     !!(started_at && round)
+  end
+
+  def game_over?
+    started_at && !round
   end
 
   def seconds_left_in_period
@@ -136,5 +140,4 @@ class Story < ActiveRecord::Base
       [score, user]
     end.sort.reverse
   end
-
 end

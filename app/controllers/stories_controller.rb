@@ -11,7 +11,7 @@ class StoriesController < ApplicationController
   end
 
   def show
-    @story = Story.find params[:id]
+    @story = Story.includes(subscriptions: :user).find params[:id]
     @sentence = Sentence.new story_id: @story.id unless @sentence
   end
 

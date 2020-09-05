@@ -1,53 +1,80 @@
-<% if current_user && current_user.subscriptions.where(story: @story).none? %>
-  <%= button_to "Subscribe", subscribe_story_path, class: "btn btn-success pull-right" %>
-<% elsif current_user && current_user.subscriptions.where(story: @story).any? %>
-  <%= button_to "Unsubscribe", unsubscribe_story_path, class: "btn btn-warning pull-right" %>
+<% if !@story.started_at || @story.round %>
+  <% if current_user && current_user.subscriptions.where(story: @story).none? %>
+    <%= button_to "Join Game", subscribe_story_path, class: "btn btn-success pull-right" %>
+  <% elsif current_user && current_user.subscriptions.where(story: @story).any? %>
+    <%= button_to "Leave Game", unsubscribe_story_path, class: "btn btn-warning pull-right" %>
+  <% end %>
 <% end %>
 
-<div class="page-header">
-  <h1>
-    <%= @story.title %><small> by <%= @story.user.display_name %></small>
-  </h1>
+<div class="page-header" style="text-align: center;">
+  <h1><%= @story.title %></h1>
+
+  <h5>by</h5>
+
+  <% @story.subscriptions.each do |sub| %>
+    <h3>
+      <%= link_to(sub.user.display_name, user_path(sub.user)) %>
+    </h3>
+  <% end %>
+
   <% if !@story.started_at && @story.user == current_user %>
-    <%= button_to "Ready Player One?", start_story_path, class: "btn btn-success btn-lg" %>
+    <%= button_to "Click To Start", start_story_path, class: "btn btn-success btn-lg" %>
   <% end %>
-
-  <% if @story.started_at && !@story.round %>
-    <h2 style="color: red; text-align: center;">Game Over</h2>
-  <% end %>
-
-  <div <%= 'class="well"'.html_safe if @story.started_at && @story.round != 1 %> >
-    <h4>
-      <%= @story.body || @story.create_body %>
-    </h4>
-  </div>
 </div>
-
 
 <% unless @story.started_at %>
   <div id="countdown" style="display:none;">-1</div>
 <% end %>
 
+<div class="col-sm-12" style="text-align: center;">
+  <% if @story.game_over? %>
+    <h4>This story has ended but the journey continues...</h4>
+  <% end %>
+</div>
+
+<% if @story.game_over? %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Story</h3>
+      </div>
+      <div class="panel-body">
+        <div <%= 'class="well"'.html_safe if @story.started_at && @story.round != 1 %> >
+          <h3>
+            <%= @story.body || @story.create_body %>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
 <% if @story.active? %>
-  <div class="well progress_well">
-    <h3 style="text-align: center;">
-      <%= 'Round ' + @story.round.to_s + ' of ' + @story.rounds.to_s %>
-      -
-      Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span>
-      <% if @story.long_running? %>
-        -
-        <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
-      <% end %>
-    </h3>
-    <div class="progress">
-      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= @story.percent_story_left %>%;">
-        <% if @story.round == 1 %>
-          First Round
-        <% elsif @story.percent_story_left > 15 && @story.percent_story_left < 100 %>
-          Story Completed <%= @story.percent_story_left %>%
-        <% elsif @story.percent_story_left == 100 %>
-          Last Round
-        <% end %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="well progress_well">
+          <h3 style="text-align: center;">
+            <%= 'Round ' + @story.round.to_s + ' of ' + @story.rounds.to_s %>
+            -
+            Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span>
+            <% if @story.long_running? %>
+              -
+              <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
+            <% end %>
+          </h3>
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= @story.percent_story_left %>%;">
+              <% if @story.round == 1 %>
+                First Round
+              <% elsif @story.percent_story_left > 15 && @story.percent_story_left < 100 %>
+                Story Completed <%= @story.percent_story_left %>%
+              <% elsif @story.percent_story_left == 100 %>
+                Last Round
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -113,6 +140,23 @@
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @story.active? %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Story</h3>
+      </div>
+      <div class="panel-body">
+        <div <%= 'class="well"'.html_safe if @story.started_at && @story.round != 1 %> >
+          <h3>
+            <%= @story.body || @story.create_body %>
+          </h3>
         </div>
       </div>
     </div>
