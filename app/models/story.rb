@@ -8,18 +8,9 @@ class Story < ActiveRecord::Base
   validates_length_of :body, maximum: 10_000
 
   TIME_PERIODS = [
-    ['2 minutes', 2.minutes],
-    ['15 seconds', 15.seconds],
-    ['30 seconds', 30.seconds],
-    ['45 seconds', 45.seconds],
     ['1 minute', 1.minute],
-    ['3 minutes', 3.minutes],
+    ['2 minutes', 2.minutes],
     ['5 mintues', 5.minutes],
-    ['10 mintues', 10.minutes],
-    ['30 minutes', 30.minutes],
-    ['1 hour', 1.hour],
-    ['6 hours', 6.hours],
-    ['12 hours', 12.hours],
     ['24 hours', 24.hours]
   ]
 
