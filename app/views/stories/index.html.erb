@@ -108,7 +108,7 @@
               <tr>
                 <th>Story</th>
                 <th>Rounds</th>
-<th><span class="badge">Subscribers</span> / Names</th>
+                <th><span class="badge">Subscribers</span> / Names</th>
               </tr>
             </thead>
             <tbody>
@@ -134,7 +134,7 @@
 <div class="col-sm-12">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Leaderboard</h3>
+      <h3 class="panel-title">Top 10 Leaderboard</h3>
     </div>
     <div class="panel-body">
       <div class="sentence_container">
@@ -148,7 +148,7 @@
               </tr>
             </thead>
             <tbody>
-              <% User.all.sort_by {|user| user.score}.reverse.take(15).each do |user| %>
+              <% User.all.sort_by {|user| user.score}.reverse.take(10).each do |user| %>
                 <tr <%= "class=success" if user == current_user %> data-link="<%= user_url(user) %>" >
                   <td><%= user.score %></td>
                   <td><%= user.display_name %></td>
