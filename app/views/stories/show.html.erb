@@ -11,9 +11,9 @@
 
   <h5>by</h5>
 
-  <% @story.subscriptions.each do |sub| %>
+  <% @users.each do |user| %>
     <h3>
-      <%= link_to(sub.user.display_name, user_path(sub.user)) %>
+      <%= link_to(user.display_name, user_path(user)) %>
     </h3>
   <% end %>
 

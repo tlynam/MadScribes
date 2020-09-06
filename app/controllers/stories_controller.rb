@@ -12,6 +12,7 @@ class StoriesController < ApplicationController
 
   def show
     @story = Story.includes(subscriptions: :user).find params[:id]
+    @users = @story.subscriptions.map { |subscription| subscription.user }.uniq
     @sentence = Sentence.new story_id: @story.id unless @sentence
   end
 
