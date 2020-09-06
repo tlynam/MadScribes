@@ -29,7 +29,7 @@
 				</ul>
 			</li>
 			<li>
-				Top Sentences by Votes:
+				Top Passages by Votes:
 				<ul style="list-style: none;">
 					<% @user.sentences.where(winner: true).order("array_length(votes, 1) DESC").take(10).each do |sentence| %>
 						<li><%= sentence.votes.size %> <%= content_tag(:a, sentence.body, href: story_url(sentence.story)) %></li>
