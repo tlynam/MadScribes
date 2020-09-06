@@ -1,7 +1,11 @@
 class SentencesController < ApplicationController
   def create
     story = Story.find(params[:story_id])
-    story.sentences.create **sentence_params.symbolize_keys, user: current_user
+
+    story.sentences.create(
+      user: current_user,
+      body: sentence_params[:body].squish
+    )
 
     redirect_to story
   end
