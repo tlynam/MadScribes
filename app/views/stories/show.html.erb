@@ -19,6 +19,8 @@
 
   <% if !@story.started_at && @story.user == current_user %>
     <%= button_to "Click To Start", start_story_path, class: "btn btn-success btn-lg" %>
+  <% elsif !@story.started_at %>
+    <h4>Waiting for host to start game...</h4>
   <% end %>
 </div>
 
@@ -63,24 +65,24 @@
   </div>
 <% end %>
 
-<div class="col-sm-12">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Story</h3>
-    </div>
-    <div class="panel-body">
-      <div class="well">
-        <h3>
+<% if @story.active? || @story.game_over? %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Story</h3>
+      </div>
+      <div class="panel-body">
+        <div style="font-family: sans-serif; font-size: 16px; line-height: 19px;">
           <% @story.ordered_sentences.each_slice(3) do |sentence_group| %>
             <p>
               <%= sentence_group.join(" ") %>
             </p>
           <% end %>
-        </h3>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>
 
 <% if @story.game_over? %>
   <div class="col-sm-12">
