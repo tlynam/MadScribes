@@ -11,7 +11,7 @@ class Story < ActiveRecord::Base
     ['1 minute', 1.minute],
     ['2 minutes', 2.minutes],
     ['5 mintues', 5.minutes],
-    ['24 hours', 24.hours]
+    # ['24 hours', 24.hours]
   ]
 
   after_create :subscribe_author
