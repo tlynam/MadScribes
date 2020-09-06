@@ -32,23 +32,6 @@
   <% end %>
 </div>
 
-<% if @story.game_over? %>
-  <div class="col-sm-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Story</h3>
-      </div>
-      <div class="panel-body">
-        <div <%= 'class="well"'.html_safe if @story.started_at && @story.round != 1 %> >
-          <h3>
-            <%= @story.body || @story.create_body %>
-          </h3>
-        </div>
-      </div>
-    </div>
-  </div>
-<% end %>
-
 <% if @story.active? %>
   <div class="col-sm-12">
     <div class="panel panel-default">
@@ -83,38 +66,57 @@
 <div class="col-sm-12">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Winning Sentences</h3>
+      <h3 class="panel-title">Story</h3>
     </div>
     <div class="panel-body">
-      <div class="sentence_container">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Round</th>
-                <th>Author</th>
-                <th>Votes</th>
-                <th>Sentence</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @story.winning_sentences.order(:round).each do |sentence| %>
-                <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> >
-                  <td><%= sentence.round %></td>
-                  <td><%= sentence.user.display_name %></td>
-                  <td><%= sentence.votes.count %></td>
-                  <td><%= sentence.body %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+      <div class="well">
+        <h3>
+          <% @story.ordered_sentences.each_slice(3) do |sentence_group| %>
+            <p>
+              <%= sentence_group.join(" ") %>
+            </p>
+          <% end %>
+        </h3>
       </div>
     </div>
   </div>
 </div>
 
-<% if @story.started_at && !@story.round %>
+<% if @story.game_over? %>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Winning Sentences</h3>
+      </div>
+      <div class="panel-body">
+        <div class="sentence_container">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Round</th>
+                  <th>Author</th>
+                  <th>Votes</th>
+                  <th>Sentence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @story.winning_sentences.order(:round).each do |sentence| %>
+                  <tr <%= 'class="success"'.html_safe if sentence.user == current_user %> >
+                    <td><%= sentence.round %></td>
+                    <td><%= sentence.user.display_name %></td>
+                    <td><%= sentence.votes.count %></td>
+                    <td><%= sentence.body %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="col-sm-12">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -140,23 +142,6 @@
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<% end %>
-
-<% if @story.active? %>
-  <div class="col-sm-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Story</h3>
-      </div>
-      <div class="panel-body">
-        <div <%= 'class="well"'.html_safe if @story.started_at && @story.round != 1 %> >
-          <h3>
-            <%= @story.body || @story.create_body %>
-          </h3>
         </div>
       </div>
     </div>

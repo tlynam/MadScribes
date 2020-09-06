@@ -130,8 +130,12 @@ class Story < ActiveRecord::Base
     scope
   end
 
+  def ordered_sentences
+    winning_sentences.order(:round).pluck(:body)
+  end
+
   def create_body
-    winning_sentences.order(:round).pluck(:body).join(" ")
+    ordered_sentences.join(" ")
   end
 
   def leaderboard
