@@ -42,7 +42,7 @@
           <h3 style="text-align: center;">
             <%= 'Round ' + @story.round.to_s + ' of ' + @story.rounds.to_s %>
             -
-            Period Time <span id="countdown"><%= @story.seconds_left_in_period %></span>
+            Time Remaining <span id="countdown"><%= @story.seconds_left_in_period %></span>
             <% if @story.long_running? %>
               -
               <%= "#{@story.find_time_range[0].last.strftime("%a %I:%M %P %Z")}" %>
@@ -154,7 +154,7 @@
 <div class="col-sm-12">
   <div class="well action_well">
     <%= form_for @sentence, url: story_sentences_url(@story), html: {class: "form-horizontal"} do |f| %>
-      <h3>Submit a Sentence</h3>
+      <h3>Submit a Passage</h3>
       <div class="field form-group">
         <%= f.label :body, class: "col-sm-1 control-label" %>
         <div class="col-sm-11">
